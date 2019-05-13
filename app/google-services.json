@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "422049073422",
+    "firebase_url": "https://yunstagram-a14ed.firebaseio.com",
+    "project_id": "yunstagram-a14ed",
+    "storage_bucket": "yunstagram-a14ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422049073422:android:97c89ac1c3f3ddb4",
+        "android_client_info": {
+          "package_name": "com.example.yun.yunstagram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422049073422-3vpv3crqpbhb98fv8dtee94h2qq93fks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6dNtNOmPzLdR-sxb_ZqIXhjr9ejtgsCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422049073422-3vpv3crqpbhb98fv8dtee94h2qq93fks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
