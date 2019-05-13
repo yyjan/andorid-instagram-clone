@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">yunstagram</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
+    <string name="title_control">Control</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_account">Account</string>
+</resources>
