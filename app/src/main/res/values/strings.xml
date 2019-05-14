@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">yunstagram</string>
+
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
     <string name="title_control">Control</string>
     <string name="title_favorite">Favorite</string>
     <string name="title_account">Account</string>
+
+    <string name="title_Login">Login</string>
+
+    <!-- Login -->
+    <string name="login_hint_email">Email</string>
+    <string name="login_hint_password">Password</string>
+    <string name="login_btn">Log In</string>
 </resources>

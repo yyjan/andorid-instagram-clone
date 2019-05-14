@@ -1,5 +1,6 @@
 package com.example.yun.yunstagram
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.navigation_account -> {
                 textMessage.setText(R.string.title_account)
+                startActivity(Intent(this, LoginActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
         }
