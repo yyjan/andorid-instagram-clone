@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.navigation_account -> {
                 textMessage.setText(R.string.title_account)
-                startActivity(Intent(this, LoginActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
         }
