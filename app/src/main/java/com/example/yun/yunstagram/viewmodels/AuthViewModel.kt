@@ -8,15 +8,15 @@ import com.example.yun.yunstagram.data.State
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(private val repository: DataRepository) : BaseViewModel() {
+class AuthViewModel @Inject constructor(private val repository: DataRepository) : BaseViewModel() {
 
     private val _loginResult = MutableLiveData<State>()
     val loginResult: LiveData<State>
         get() = _loginResult
 
     fun login(email: String, password: String) {
-       //if (!isUserNameValid(email)) return
-        //if (!isPasswordValid(password)) return
+        //if (!isUserNameValid(email)) return
+        // if (!isPasswordValid(password)) return
 
         disposables += repository.login(email, password)
             .subscribe({

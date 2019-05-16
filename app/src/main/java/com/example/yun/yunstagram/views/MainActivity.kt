@@ -1,10 +1,10 @@
-package com.example.yun.yunstagram
+package com.example.yun.yunstagram.views
 
-import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
+import com.example.yun.yunstagram.R
 
 class MainActivity : AppCompatActivity() {
 
