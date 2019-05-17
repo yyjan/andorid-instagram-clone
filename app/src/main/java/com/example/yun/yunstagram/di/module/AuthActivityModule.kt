@@ -9,5 +9,5 @@ import dagger.android.ContributesAndroidInjector
 internal abstract class AuthActivityModule {
     @PerFragment
     @ContributesAndroidInjector(modules = [AuthLoginFragmentModule::class])
-    internal abstract fun provideSignInFragment(): AuthLoginFragment
+    internal abstract fun provideAuthLoginFragment(): AuthLoginFragment
 }

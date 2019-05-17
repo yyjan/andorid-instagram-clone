@@ -18,5 +18,5 @@ internal abstract class AuthLoginFragmentModule {
     @Binds
     @IntoMap
     @ViewModelKey(AuthViewModel::class)
-    internal abstract fun bindLoginViewModel(viewModel: AuthViewModel): ViewModel
+    internal abstract fun bindAuthViewModel(viewModel: AuthViewModel): ViewModel
 }
