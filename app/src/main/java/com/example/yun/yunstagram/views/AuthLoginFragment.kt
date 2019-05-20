@@ -41,7 +41,7 @@ class AuthLoginFragment : DaggerFragment() {
         }
 
         binding.viewmodel.let { loginViewModel ->
-            authViewModel?.loginResult?.observe(this, Observer { state ->
+            authViewModel.loginResult.observe(this, Observer { state ->
                 if (state.isSuccess) {
                     activity?.let { it ->
                         it.finish()

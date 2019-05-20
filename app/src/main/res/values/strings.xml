@@ -16,4 +16,11 @@
     <string name="login_btn">Log In</string>
     <string name="login_create_account_btn">Create New Account</string>
     <string name="sign_up_btn">Create New Account</string>
+
+    <!-- Account -->
+    <string name="account_posts">Posts</string>
+    <string name="account_followers">Followers</string>
+    <string name="account_following">Following</string>
+    <string name="account_edit_profile">Edit Profile</string>
+
 </resources>

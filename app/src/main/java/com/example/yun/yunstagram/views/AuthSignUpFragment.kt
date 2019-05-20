@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
+import com.example.yun.yunstagram.databinding.FragmentAuthSignupBinding
 import com.example.yun.yunstagram.viewmodels.AuthViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_auth_signup.*
@@ -33,7 +34,7 @@ class AuthSignUpFragment : DaggerFragment() {
     ): View? {
         authViewModel = ViewModelProviders.of(this, viewModelFactory).get(AuthViewModel::class.java)
 
-        val binding = DataBindingUtil.inflate<com.example.yun.yunstagram.databinding.FragmentAuthSignupBinding>(
+        val binding = DataBindingUtil.inflate<FragmentAuthSignupBinding>(
             inflater, R.layout.fragment_auth_signup, container, false
         ).apply {
             viewmodel = authViewModel

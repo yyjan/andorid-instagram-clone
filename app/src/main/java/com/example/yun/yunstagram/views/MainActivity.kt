@@ -1,34 +1,31 @@
 package com.example.yun.yunstagram.views
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.yun.yunstagram.R
+import com.example.yun.yunstagram.utilities.replaceFragmentInActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.android.support.DaggerAppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
-    private lateinit var textMessage: TextView
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                textMessage.setText(R.string.title_home)
+                replaceFragment(HomeFragment.newInstance())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search -> {
-                textMessage.setText(R.string.title_search)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_control -> {
-                textMessage.setText(R.string.title_control)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_favorite -> {
-                textMessage.setText(R.string.title_favorite)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_account -> {
-                textMessage.setText(R.string.title_account)
+                replaceFragment(ProfileFragment.newInstance())
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -40,7 +37,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        textMessage = findViewById(R.id.message)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        replaceFragment(HomeFragment.newInstance())
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        replaceFragmentInActivity(fragment, R.id.contentFrame)
     }
 }
