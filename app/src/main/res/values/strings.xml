@@ -12,5 +12,8 @@
     <!-- Login -->
     <string name="login_hint_email">Email</string>
     <string name="login_hint_password">Password</string>
+    <string name="login_hint_username">Username</string>
     <string name="login_btn">Log In</string>
+    <string name="login_create_account_btn">Create New Account</string>
+    <string name="sign_up_btn">Create New Account</string>
 </resources>

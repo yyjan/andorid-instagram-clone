@@ -1,14 +1,15 @@
 package com.example.yun.yunstagram.data
 
 data class User(
-    val id: String,
-    val username: String,
-    val biography: String,
-    val media_count: Int,
-    val followers_count: Int,
-    val follows_count: Int,
-    val profile_picture_url: String,
-    val website: String
+    var uid: String? = null,
+    var email: String? = null,
+    var username: String? = null,
+    var biography: String? = null,
+    var media_count: Int = 0,
+    var followers_count: Int = 0,
+    var follows_count: Int = 0,
+    var profile_picture_url: String? = null,
+    var website: String? = null
 ) {
 
 }

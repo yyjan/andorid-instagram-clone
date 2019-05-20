@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.yun.yunstagram.data.DataRepository
 import com.example.yun.yunstagram.data.State
+import com.example.yun.yunstagram.data.User
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 
@@ -15,8 +16,8 @@ class AuthViewModel @Inject constructor(private val repository: DataRepository) 
         get() = _loginResult
 
     fun login(email: String, password: String) {
-        //if (!isUserNameValid(email)) return
-        // if (!isPasswordValid(password)) return
+        if (!isEmailValid(email)) return
+        if (!isPasswordValid(password)) return
 
         disposables += repository.login(email, password)
             .subscribe({
@@ -26,8 +27,32 @@ class AuthViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
+    fun signup(email: String, password: String, username: String) {
+        if (!isEmailValid(email)) return
+        if (!isPasswordValid(password)) return
+
+        disposables += repository.signUp(email, password)
+            .subscribe({
+                updateUser(it.uid, it.email, username)
+            }) {
+                _loginResult.value = State(errorMessages = it.message)
+            }
+    }
+
+    fun updateUser(uid: String, email: String?, username: String) {
+        if (uid.isEmpty()) return
+
+        val user = User(uid, email, username)
+        disposables += repository.updateUser(user)
+            .subscribe({
+                _loginResult.value = State(isSuccess = true)
+            }) {
+                _loginResult.value = State(errorMessages = it.message)
+            }
+    }
+
     // username check
-    private fun isUserNameValid(username: String): Boolean {
+    private fun isEmailValid(username: String): Boolean {
         return if (username.contains('@')) {
             Patterns.EMAIL_ADDRESS.matcher(username).matches()
         } else {
