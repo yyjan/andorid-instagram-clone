@@ -17,7 +17,6 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_auth_signup.*
 import javax.inject.Inject
 
-
 class AuthSignUpFragment : DaggerFragment() {
 
     @Inject
@@ -42,11 +41,11 @@ class AuthSignUpFragment : DaggerFragment() {
         }
 
         binding.viewmodel.let {
-            authViewModel.loginResult?.observe(this, Observer { state ->
+            authViewModel.loginResult.observe(this, Observer { state ->
                 if (state.isSuccess) {
                     activity?.let { it ->
                         it.finish()
-                        startActivity(Intent(activity, MainActivity::class.java))
+                        startActivity(Intent(it, MainActivity::class.java))
                     }
                 } else {
                     Toast.makeText(activity, state.errorMessages, Toast.LENGTH_SHORT).show()
