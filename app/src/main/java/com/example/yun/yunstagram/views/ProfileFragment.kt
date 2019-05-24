@@ -10,8 +10,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileBinding
+import com.example.yun.yunstagram.utilities.Constants
+import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import com.example.yun.yunstagram.viewmodels.ProfileViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -42,6 +45,10 @@ class ProfileFragment : DaggerFragment() {
 
         profileViewModel.user.observe(this, Observer {
             binding.user = it
+
+            GlideApp.with(this)
+                .load(it.profile_picture_url)
+                .into(iv_avatar)
         })
 
         return binding.root
@@ -49,11 +56,25 @@ class ProfileFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        profileViewModel.fetchUserData()
+        fetchUserData()
 
         btn_edit_profile.setOnClickListener {
-            startActivity(Intent(activity, ProfileEditActivity::class.java))
+            startActivityForResult(Intent(activity, ProfileEditActivity::class.java), Constants.REQUEST_CODE_FOR_PROFILE_EDIT)
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_CODE_FOR_PROFILE_EDIT -> {
+                fetchUserData()
+            }
+        }
+    }
+
+    private fun fetchUserData() {
+        profileViewModel.fetchUserData()
     }
 }

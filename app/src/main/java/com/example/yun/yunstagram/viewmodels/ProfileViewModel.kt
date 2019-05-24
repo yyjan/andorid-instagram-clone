@@ -1,5 +1,6 @@
 package com.example.yun.yunstagram.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.yun.yunstagram.data.DataRepository
@@ -47,6 +48,10 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
             }) {
                 _updateResult.value = State(errorMessages = it.message)
             }
+    }
+
+    fun updateImage(uri : Uri){
+        repository.uploadFile(uri)
     }
 
 

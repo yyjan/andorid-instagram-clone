@@ -1,6 +1,10 @@
 package com.example.yun.yunstagram.views
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
-import com.example.yun.yunstagram.databinding.FragmentProfileBinding
 import com.example.yun.yunstagram.databinding.FragmentProfileEditBinding
+import com.example.yun.yunstagram.utilities.Constants
+import com.example.yun.yunstagram.utilities.loadCircleImage
 import com.example.yun.yunstagram.viewmodels.ProfileViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
@@ -23,6 +28,8 @@ class ProfileEditFragment : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var profileViewModel: ProfileViewModel
+
+    private var photoUri: Uri? = null
 
     companion object {
         fun newInstance() = ProfileEditFragment()
@@ -41,6 +48,7 @@ class ProfileEditFragment : DaggerFragment() {
 
         profileViewModel.user.observe(this, Observer {
             binding.user = it
+            iv_avatar.loadCircleImage(it.profile_picture_url)
         })
 
         profileViewModel.updateResult.observe(this, Observer { state ->
@@ -64,6 +72,32 @@ class ProfileEditFragment : DaggerFragment() {
             val bio = et_bio.text.toString().trim()
             profileViewModel.updateUser(userName, website, bio)
         }
+
+        tv_change_photo.setOnClickListener {
+            getPhotoImages()
+        }
     }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != RESULT_OK) return
+
+        when (requestCode) {
+            Constants.REQUEST_CODE_FOR_IMAGE -> {
+                photoUri = data?.data
+                photoUri?.let { profileViewModel.updateImage(it) }
+
+                iv_avatar.loadCircleImage(photoUri.toString())
+            }
+        }
+    }
+    private fun getPhotoImages() {
+        val intent = Intent()
+        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+        intent.action = Intent.ACTION_PICK
+        startActivityForResult(Intent.createChooser(intent, "파일 선택"), Constants.REQUEST_CODE_FOR_IMAGE)
+    }
+
 
 }

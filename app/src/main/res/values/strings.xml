@@ -25,6 +25,6 @@
     <string name="account_edit_profile">Edit Profile</string>
     <string name="profile_hint_website">Website</string>
     <string name="profile_hint_biography">Biography</string>
-
+    <string name="profile_change_photo">Change Profile Photo</string>
 
 </resources>
