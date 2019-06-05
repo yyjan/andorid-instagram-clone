@@ -12,12 +12,17 @@ interface DataSource {
 
     fun signUp(email: String, password: String): Single<FirebaseUser>
 
-    fun updateUser(user: User) : Completable
+    fun updateUser(user: User): Completable
 
-    fun getUser(uid: String) : Single<Value<DocumentSnapshot>>
+    fun getUser(uid: String): Single<Value<DocumentSnapshot>>
 
-    fun getCurrentUid() : String?
+    fun getCurrentUid(): String?
 
-    fun uploadFile(uri : Uri)
+    fun uploadFile(uri: Uri, callback: UploadCallback)
+
+    interface UploadCallback {
+        fun onSuccess(downloadUri: String)
+        fun onFailed(messages: String)
+    }
 
 }

@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.yun.yunstagram.data.DataRepository
+import com.example.yun.yunstagram.data.DataSource
 import com.example.yun.yunstagram.data.State
 import com.example.yun.yunstagram.data.User
 import io.reactivex.rxkotlin.plusAssign
@@ -19,6 +20,10 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
     val updateResult: LiveData<State>
         get() = _updateResult
 
+    private val _uploadImageResult = MutableLiveData<State>()
+    val uploadImageResult: LiveData<State>
+        get() = _uploadImageResult
+
     fun fetchUserData() {
         val uid = repository.getCurrentUid()
         if (uid.isNullOrEmpty()) return
@@ -30,18 +35,7 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
             }
     }
 
-    fun updateUser(username: String, website: String, bio: String) {
-        val user = User(
-            user.value?.uid,
-            user.value?.email,
-            username,
-            bio,
-            website,
-            user.value?.media_count,
-            user.value?.followers_count,
-            user.value?.follows_count,
-            user.value?.profile_picture_url
-        )
+    fun updateUser(user: User) {
         disposables += repository.updateUser(user)
             .subscribe({
                 _updateResult.value = State(isSuccess = true)
@@ -50,8 +44,55 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
             }
     }
 
-    fun updateImage(uri : Uri){
-        repository.uploadFile(uri)
+    fun updateUserProfileImage(user: User) {
+        disposables += repository.updateUser(user)
+            .subscribe({
+                _uploadImageResult.value = State(isSuccess = true)
+            }) {
+                _uploadImageResult.value = State(errorMessages = it.message)
+            }
+    }
+
+    fun updateImage(uri: Uri) {
+        // TODO : add disposables
+        repository.uploadFile(uri, object : DataSource.UploadCallback {
+            override fun onFailed(messages: String) {
+                _uploadImageResult.value = State(errorMessages = messages)
+            }
+
+            override fun onSuccess(downloadUri: String) {
+                user.value?.profile_picture_url = downloadUri
+                updateUserProfileImage(convertUser())
+            }
+        })
+    }
+
+    fun makeUser(username: String, website: String, bio: String): User {
+        return User(
+            this.user.value?.uid,
+            this.user.value?.email,
+            username,
+            bio,
+            website,
+            this.user.value?.media_count,
+            this.user.value?.followers_count,
+            this.user.value?.follows_count,
+            this.user.value?.profile_picture_url
+        )
+    }
+
+    private fun convertUser(): User {
+        return User(
+            this.user.value?.uid,
+            this.user.value?.email,
+            this.user.value?.username,
+            this.user.value?.website,
+            this.user.value?.website,
+            this.user.value?.media_count,
+            this.user.value?.followers_count,
+            this.user.value?.follows_count,
+            this.user.value?.profile_picture_url
+        )
     }
 
 

@@ -13,10 +13,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileEditBinding
 import com.example.yun.yunstagram.utilities.Constants
-import com.example.yun.yunstagram.utilities.loadCircleImage
 import com.example.yun.yunstagram.viewmodels.ProfileViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
@@ -48,12 +48,20 @@ class ProfileEditFragment : DaggerFragment() {
 
         profileViewModel.user.observe(this, Observer {
             binding.user = it
-            iv_avatar.loadCircleImage(it.profile_picture_url)
+            showProfileImage(it.profile_picture_url)
         })
 
         profileViewModel.updateResult.observe(this, Observer { state ->
             if (state.isSuccess) {
                 activity?.finish()
+            } else {
+                Toast.makeText(activity, state.errorMessages, Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        profileViewModel.uploadImageResult.observe(this, Observer { state ->
+            if (state.isSuccess) {
+                showProfileImage(photoUri.toString())
             } else {
                 Toast.makeText(activity, state.errorMessages, Toast.LENGTH_SHORT).show()
             }
@@ -70,14 +78,15 @@ class ProfileEditFragment : DaggerFragment() {
             val userName = et_name.text.toString().trim()
             val website = et_website.text.toString().trim()
             val bio = et_bio.text.toString().trim()
-            profileViewModel.updateUser(userName, website, bio)
+            val user = profileViewModel.makeUser(userName, website, bio)
+
+            profileViewModel.updateUser(user)
         }
 
         tv_change_photo.setOnClickListener {
             getPhotoImages()
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -87,11 +96,15 @@ class ProfileEditFragment : DaggerFragment() {
             Constants.REQUEST_CODE_FOR_IMAGE -> {
                 photoUri = data?.data
                 photoUri?.let { profileViewModel.updateImage(it) }
-
-                iv_avatar.loadCircleImage(photoUri.toString())
             }
         }
     }
+
+    private fun showProfileImage(url: String?) {
+        GlideApp.with(this).load(url)
+            .into(iv_avatar)
+    }
+
     private fun getPhotoImages() {
         val intent = Intent()
         intent.type = MediaStore.Images.Media.CONTENT_TYPE
