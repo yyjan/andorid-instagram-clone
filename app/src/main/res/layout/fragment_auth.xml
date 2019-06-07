@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable name="viewmodel" type="com.example.yun.yunstagram.viewmodels.AuthViewModel"/>
@@ -20,11 +21,11 @@
                 android:layout_marginBottom="@dimen/common_margin"
                 android:text="@string/app_name"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_create_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/common_margin"
+                android:layout_marginBottom="@dimen/common_margin_24dp"
                 android:textSize="@dimen/text_size"
                 android:text="@string/login_create_account_btn"/>
 
@@ -32,7 +33,9 @@
                 android:id="@+id/btn_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size"
+                android:textStyle="bold"
                 android:text="@string/login_btn"/>
 
     </LinearLayout>
