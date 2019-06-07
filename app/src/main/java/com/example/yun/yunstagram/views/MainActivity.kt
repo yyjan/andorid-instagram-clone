@@ -38,6 +38,7 @@ class MainActivity : DaggerAppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        navView.itemIconTintList = null
         replaceFragment(HomeFragment.newInstance())
     }
 

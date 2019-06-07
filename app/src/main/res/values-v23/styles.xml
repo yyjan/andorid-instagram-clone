@@ -1,21 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionBarTheme">@style/CommonActionBar</item>
         <item name="bottomAppBarStyle">@style/BottomAppBar</item>
+        <item name="android:statusBarColor">@color/gray</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
-
-    <style name="CommonActionBar" parent="@style/ThemeOverlay.MaterialComponents.ActionBar">
-        <item name="android:background">@color/white</item>
-    </style>
-
-    <style name="BottomAppBar" parent="@style/Widget.MaterialComponents.BottomAppBar">
-        <!--<item name="android:background">#e0e0e0</item>-->
-    </style>
-
-    <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
 </resources>
