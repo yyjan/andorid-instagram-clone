@@ -9,6 +9,9 @@
 
     <string name="title_Login">Login</string>
 
+    <!-- Menu -->
+    <string name="menu_share">Share</string>
+
     <!-- Login -->
     <string name="login_hint_email">Email</string>
     <string name="login_hint_password">Password</string>
@@ -26,5 +29,9 @@
     <string name="profile_hint_website">Website</string>
     <string name="profile_hint_biography">Biography</string>
     <string name="profile_change_photo">Change Profile Photo</string>
+
+    <!-- Post -->
+    <string name="title_edit_post">New Post</string>
+    <string name="edit_post_hint">Write a caption..</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.yun.yunstagram.views
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.yun.yunstagram.R
@@ -19,6 +20,7 @@ class MainActivity : DaggerAppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_control -> {
+                openActivity(Intent(this, PostEditActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_favorite -> {
@@ -44,5 +46,9 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
         replaceFragmentInActivity(fragment, R.id.contentFrame)
+    }
+
+    private fun openActivity(intent: Intent){
+        startActivity(Intent(this, PostEditActivity::class.java))
     }
 }

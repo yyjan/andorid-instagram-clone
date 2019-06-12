@@ -3,7 +3,9 @@ package com.example.yun.yunstagram.data
 import android.net.Uri
 import com.androidhuman.rxfirebase2.auth.RxFirebaseAuth
 import com.androidhuman.rxfirebase2.firestore.RxFirebaseFirestore
+import com.androidhuman.rxfirebase2.firestore.RxFirebaseFirestore.update
 import com.androidhuman.rxfirebase2.firestore.model.Value
+import com.example.yun.yunstagram.utilities.Constants
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -17,11 +19,13 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 
-class DataRepository() : DataSource {
+class DataRepository : DataSource {
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val storage: FirebaseStorage = FirebaseStorage.getInstance()
 
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private var storage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val usersCollection = db.collection(Constants.DB_ROOT_USERS)
+    private val postsCollection = db.collection(Constants.DB_ROOT_POSTS)
 
     private var loggedInUser: FirebaseUser? = null
 
@@ -36,15 +40,19 @@ class DataRepository() : DataSource {
     }
 
     override fun updateUser(user: User): Completable {
-        return RxFirebaseFirestore.set(db.collection("user").document(user.uid!!), user)
+        return RxFirebaseFirestore.set(usersCollection.document(user.uid!!), user)
     }
 
     override fun getUser(uid: String): Single<Value<DocumentSnapshot>> {
-        return RxFirebaseFirestore.data(db.collection("user").document(uid))
+        return RxFirebaseFirestore.data(usersCollection.document(uid))
     }
 
     override fun getCurrentUid(): String? {
         return auth.currentUser?.uid
+    }
+
+    override fun updatePost(post: Post): Completable {
+        return RxFirebaseFirestore.set(postsCollection.document(), post)
     }
 
     private fun setLoggedInUser(loggedInUser: FirebaseUser?) {

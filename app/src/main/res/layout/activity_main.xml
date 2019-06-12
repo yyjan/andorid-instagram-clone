@@ -24,6 +24,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:labelVisibilityMode="unlabeled"
             app:itemHorizontalTranslationEnabled="false"
-            app:menu="@menu/bottom_nav_menu"/>
+            app:menu="@menu/menu_bottom_nav"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,7 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
         val uid = repository.getCurrentUid()
         if (uid.isNullOrEmpty()) return
         disposables += repository.getUser(uid)
-            .compose(changeLoadingState())
+            .compose(loadingSingleTransformer())
             .subscribe({
                 _user.value = it.value().toObject(User::class.java)
             }) {

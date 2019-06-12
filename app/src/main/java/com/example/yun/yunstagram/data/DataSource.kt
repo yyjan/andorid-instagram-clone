@@ -20,6 +20,8 @@ interface DataSource {
 
     fun uploadFile(uri: Uri, callback: UploadCallback)
 
+    fun updatePost(post: Post): Completable
+
     interface UploadCallback {
         fun onSuccess(downloadUri: String)
         fun onFailed(messages: String)
