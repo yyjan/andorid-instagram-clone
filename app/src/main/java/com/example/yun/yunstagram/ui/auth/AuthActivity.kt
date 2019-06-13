@@ -1,9 +1,8 @@
-package com.example.yun.yunstagram.views
+package com.example.yun.yunstagram.ui.auth
 
 import android.os.Bundle
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.utilities.replaceFragmentInActivity
-import com.example.yun.yunstagram.viewmodels.AuthViewModel
 import dagger.android.support.DaggerAppCompatActivity
 
 class AuthActivity : DaggerAppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.views
+package com.example.yun.yunstagram.ui.profile
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -17,7 +17,6 @@ import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileEditBinding
 import com.example.yun.yunstagram.utilities.Constants
-import com.example.yun.yunstagram.viewmodels.ProfileViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
 import javax.inject.Inject

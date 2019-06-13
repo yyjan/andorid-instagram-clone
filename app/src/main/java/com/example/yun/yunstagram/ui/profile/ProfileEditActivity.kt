@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.views
+package com.example.yun.yunstagram.ui.profile
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -16,7 +16,9 @@ class ProfileEditActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_profile_edit)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ProfileEditFragment.newInstance())
+                .replace(R.id.container,
+                    ProfileEditFragment.newInstance()
+                )
                 .commitNow()
         }
 

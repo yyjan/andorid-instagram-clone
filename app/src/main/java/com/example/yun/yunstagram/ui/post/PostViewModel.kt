@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.viewmodels
+package com.example.yun.yunstagram.ui.post
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,6 +6,7 @@ import com.example.yun.yunstagram.data.DataRepository
 import com.example.yun.yunstagram.data.Post
 import com.example.yun.yunstagram.data.State
 import com.example.yun.yunstagram.utilities.getLocalDateTime
+import com.example.yun.yunstagram.ui.BaseViewModel
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 

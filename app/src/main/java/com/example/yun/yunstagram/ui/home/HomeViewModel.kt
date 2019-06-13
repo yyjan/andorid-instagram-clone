@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.viewmodels
+package com.example.yun.yunstagram.ui.home
 
 import androidx.lifecycle.ViewModel;
 

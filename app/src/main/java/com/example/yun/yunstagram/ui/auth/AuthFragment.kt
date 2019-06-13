@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.views
+package com.example.yun.yunstagram.ui.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentAuthBinding
 import com.example.yun.yunstagram.utilities.addFragment
-import com.example.yun.yunstagram.viewmodels.AuthViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_auth.*
 import javax.inject.Inject

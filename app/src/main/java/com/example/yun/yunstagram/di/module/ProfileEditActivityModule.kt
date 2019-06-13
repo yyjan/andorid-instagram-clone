@@ -1,7 +1,7 @@
 package com.example.yun.yunstagram.di.module
 
 import com.example.yun.yunstagram.di.scope.PerFragment
-import com.example.yun.yunstagram.views.*
+import com.example.yun.yunstagram.ui.profile.ProfileEditFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

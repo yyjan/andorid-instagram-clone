@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.viewmodels
+package com.example.yun.yunstagram.ui.auth
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.yun.yunstagram.data.DataRepository
 import com.example.yun.yunstagram.data.State
 import com.example.yun.yunstagram.data.User
+import com.example.yun.yunstagram.ui.BaseViewModel
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 

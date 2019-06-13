@@ -3,7 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewmodel" type="com.example.yun.yunstagram.viewmodels.AuthViewModel"/>
+        <variable name="viewmodel" type="com.example.yun.yunstagram.ui.auth.AuthViewModel"/>
     </data>
 
 

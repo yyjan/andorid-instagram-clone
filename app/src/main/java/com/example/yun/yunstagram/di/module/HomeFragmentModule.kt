@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.yun.yunstagram.di.key.ViewModelKey
 import com.example.yun.yunstagram.utilities.DaggerViewModelFactory
-import com.example.yun.yunstagram.viewmodels.HomeViewModel
+import com.example.yun.yunstagram.ui.home.HomeViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewmodel" type="com.example.yun.yunstagram.viewmodels.PostViewModel"/>
+        <variable name="viewmodel" type="com.example.yun.yunstagram.ui.post.PostViewModel"/>
         <variable name="user" type="com.example.yun.yunstagram.data.Post"/>
     </data>
 
@@ -12,7 +12,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".views.PostEditFragment"
+            tools:context=".ui.post.PostEditFragment"
             android:padding="@dimen/common_margin_24dp">
 
         <EditText

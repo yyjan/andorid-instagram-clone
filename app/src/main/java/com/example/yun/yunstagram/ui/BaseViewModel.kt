@@ -1,11 +1,9 @@
-package com.example.yun.yunstagram.viewmodels
+package com.example.yun.yunstagram.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.yun.yunstagram.data.State
 import io.reactivex.CompletableTransformer
-import io.reactivex.ObservableTransformer
 import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

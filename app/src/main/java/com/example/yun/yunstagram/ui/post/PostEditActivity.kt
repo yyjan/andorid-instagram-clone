@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.views
+package com.example.yun.yunstagram.ui.post
 
 import android.os.Bundle
 import com.example.yun.yunstagram.R

@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.views
+package com.example.yun.yunstagram.ui.post
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentPostEditBinding
-import com.example.yun.yunstagram.viewmodels.PostViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_post_edit.*
 import javax.inject.Inject

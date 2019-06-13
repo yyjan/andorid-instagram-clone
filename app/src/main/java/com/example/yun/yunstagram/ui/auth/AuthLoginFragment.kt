@@ -1,4 +1,4 @@
-package com.example.yun.yunstagram.views
+package com.example.yun.yunstagram.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentAuthLoginBinding
-import com.example.yun.yunstagram.viewmodels.AuthViewModel
+import com.example.yun.yunstagram.ui.home.MainActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_auth_login.*
 import javax.inject.Inject
@@ -58,6 +58,10 @@ class AuthLoginFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        // TODO: remove test code
+        et_email.setText("test@test.com")
+        et_password.setText("test1234")
 
         btn_login.setOnClickListener {
             val email = et_email.text.toString().trim()

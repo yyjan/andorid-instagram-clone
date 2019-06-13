@@ -1,9 +1,9 @@
 package com.example.yun.yunstagram.di.module
 
 import com.example.yun.yunstagram.di.scope.PerFragment
-import com.example.yun.yunstagram.views.AuthFragment
-import com.example.yun.yunstagram.views.AuthLoginFragment
-import com.example.yun.yunstagram.views.AuthSignUpFragment
+import com.example.yun.yunstagram.ui.auth.AuthFragment
+import com.example.yun.yunstagram.ui.auth.AuthLoginFragment
+import com.example.yun.yunstagram.ui.auth.AuthSignUpFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -1,10 +1,12 @@
-package com.example.yun.yunstagram.views
+package com.example.yun.yunstagram.ui.home
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.utilities.replaceFragmentInActivity
+import com.example.yun.yunstagram.ui.post.PostEditActivity
+import com.example.yun.yunstagram.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
 
