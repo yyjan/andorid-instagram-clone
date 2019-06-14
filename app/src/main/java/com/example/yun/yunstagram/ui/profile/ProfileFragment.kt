@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileBinding
-import com.example.yun.yunstagram.utilities.Constants
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -57,7 +56,7 @@ class ProfileFragment : DaggerFragment() {
         fetchUserData()
 
         btn_edit_profile.setOnClickListener {
-            startActivityForResult(Intent(activity, ProfileEditActivity::class.java), Constants.REQUEST_CODE_FOR_PROFILE_EDIT)
+            startActivityForResult(Intent(activity, ProfileEditActivity::class.java), REQUEST_CODE_FOR_PROFILE_EDIT)
         }
 
     }

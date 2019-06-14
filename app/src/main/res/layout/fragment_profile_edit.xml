@@ -28,7 +28,8 @@
                     android:id="@+id/iv_avatar"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginBottom="@dimen/common_margin_8dp"/>
+                    android:layout_marginBottom="@dimen/common_margin_8dp"
+                    android:background="@color/gray"/>
 
             <TextView
                     android:id="@+id/tv_change_photo"

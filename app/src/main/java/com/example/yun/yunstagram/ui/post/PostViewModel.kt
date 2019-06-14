@@ -1,8 +1,10 @@
 package com.example.yun.yunstagram.ui.post
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.yun.yunstagram.data.DataRepository
+import com.example.yun.yunstagram.data.DataSource
 import com.example.yun.yunstagram.data.Post
 import com.example.yun.yunstagram.data.State
 import com.example.yun.yunstagram.utilities.getLocalDateTime
@@ -30,6 +32,19 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
+    fun updateImage(uri: Uri) {
+        // TODO: add disposables
+        repository.uploadFile(uri, object : DataSource.UploadCallback {
+            override fun onFailed(messages: String) {
+                // TODO: error
+            }
+
+            override fun onSuccess(downloadUri: String) {
+                _post.value = Post(picture_url=downloadUri)
+            }
+        })
+    }
+
     fun makePost(messages: String): Post {
         val uid = repository.getCurrentUid()
         val time = getLocalDateTime()
@@ -38,7 +53,8 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             id = id,
             created_time = time,
             author = uid,
-            message = messages
+            message = messages,
+            picture_url = post.value?.picture_url
         )
     }
 

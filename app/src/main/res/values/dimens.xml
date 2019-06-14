@@ -5,6 +5,7 @@
 
     <dimen name="common_margin">32dp</dimen>
     <dimen name="common_margin_24dp">24dp</dimen>
+    <dimen name="common_margin_16dp">16dp</dimen>
     <dimen name="common_margin_8dp">8dp</dimen>
     <dimen name="common_padding_6dp">6dp</dimen>
 

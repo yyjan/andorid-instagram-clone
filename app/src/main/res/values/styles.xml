@@ -22,5 +22,9 @@
     <style name="TextInputEditText">
         <item name="android:textSize">@dimen/text_size_14sp</item>
     </style>
-    
+
+    <style name="TextButton">
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
 </resources>

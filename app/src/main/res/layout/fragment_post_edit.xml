@@ -5,7 +5,7 @@
 
     <data>
         <variable name="viewmodel" type="com.example.yun.yunstagram.ui.post.PostViewModel"/>
-        <variable name="user" type="com.example.yun.yunstagram.data.Post"/>
+        <variable name="post" type="com.example.yun.yunstagram.data.Post"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,13 +15,55 @@
             tools:context=".ui.post.PostEditFragment"
             android:padding="@dimen/common_margin_24dp">
 
-        <EditText
-                style="@style/TextInputEditText"
-                android:id="@+id/et_message"
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/edit_post_hint"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content">
+
+            <EditText
+                    style="@style/TextInputEditText"
+                    android:id="@+id/et_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:hint="@string/edit_post_hint"
+                    android:background="@null"
+                    android:text="@={post.message}"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/layout_image"/>
+
+            <LinearLayout
+                    android:id="@+id/layout_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginLeft="@dimen/common_margin_16dp"
+                    app:layout_constraintLeft_toRightOf="@+id/et_message">
+
+                <ImageView
+                        android:id="@+id/iv_image"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="@color/gray"/>
+
+                <TextView
+                        android:id="@+id/btn_edit_image"
+                        style="@style/TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/common_margin_8dp"
+                        android:layout_gravity="center"
+                        android:text="@string/edit_post_image"/>
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

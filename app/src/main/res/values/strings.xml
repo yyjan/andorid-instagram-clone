@@ -33,5 +33,6 @@
     <!-- Post -->
     <string name="title_edit_post">New Post</string>
     <string name="edit_post_hint">Write a caption..</string>
+    <string name="edit_post_image">Edit</string>
 
 </resources>
