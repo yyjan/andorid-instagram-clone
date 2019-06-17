@@ -21,6 +21,10 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
     val updateResult: LiveData<State>
         get() = _updateResult
 
+    private val _logOutState = MutableLiveData<Boolean>()
+    val logOutState: LiveData<Boolean>
+        get() = _logOutState
+
     private val _uploadImageResult = MutableLiveData<State>()
     val uploadImageResult: LiveData<State>
         get() = _uploadImageResult
@@ -33,6 +37,16 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
             .subscribe({
                 _user.value = it.value().toObject(User::class.java)
             }) {
+                it.printStackTrace()
+            }
+    }
+
+    fun logOut(){
+        disposables += repository.signOut()
+            .subscribe({
+                _logOutState.postValue(true)
+            }) {
+                _logOutState.postValue(false)
                 it.printStackTrace()
             }
     }

@@ -1,14 +1,17 @@
 package com.example.yun.yunstagram.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentAuthBinding
+import com.example.yun.yunstagram.ui.home.MainActivity
 import com.example.yun.yunstagram.utilities.addFragment
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_auth.*
@@ -38,13 +41,19 @@ class AuthFragment : DaggerFragment() {
             lifecycleOwner = this@AuthFragment
         }
 
+        authViewModel.autoLoginState.observe(this, Observer { isAutoLogin ->
+            if (isAutoLogin) {
+                activity?.finish()
+                startActivity(Intent(activity, MainActivity::class.java))
+            }
+        })
+
         return binding.root
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        authViewModel = ViewModelProviders.of(this).get(AuthViewModel::class.java)
+        authViewModel.checkAutoLogin()
 
         btn_create_account.setOnClickListener {
             addFragment(activity!!, AuthSignUpFragment(), R.id.contentFrame, "AuthSignUpFragment")

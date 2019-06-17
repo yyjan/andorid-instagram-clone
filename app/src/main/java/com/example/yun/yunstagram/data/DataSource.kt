@@ -12,9 +12,13 @@ interface DataSource {
 
     fun signUp(email: String, password: String): Single<FirebaseUser>
 
+    fun signOut(): Completable
+
     fun updateUser(user: User): Completable
 
     fun getUser(uid: String): Single<Value<DocumentSnapshot>>
+
+    fun getCurrentUser() : FirebaseUser?
 
     fun getCurrentUid(): String?
 

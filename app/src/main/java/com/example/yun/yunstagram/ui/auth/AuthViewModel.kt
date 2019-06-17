@@ -16,6 +16,18 @@ class AuthViewModel @Inject constructor(private val repository: DataRepository) 
     val loginResult: LiveData<State>
         get() = _loginResult
 
+    private val _autoLoginState = MutableLiveData<Boolean>()
+    val autoLoginState: LiveData<Boolean>
+        get() = _autoLoginState
+
+    fun checkAutoLogin(){
+        if (repository.getCurrentUser() != null){
+            _autoLoginState.postValue(true)
+        } else {
+            _autoLoginState.postValue(false)
+        }
+    }
+
     fun login(email: String, password: String) {
         if (!isEmailValid(email)) return
         if (!isPasswordValid(password)) return

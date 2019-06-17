@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
         <variable name="viewmodel" type="com.example.yun.yunstagram.ui.profile.ProfileViewModel"/>
         <variable name="user" type="com.example.yun.yunstagram.data.User"/>
     </data>
@@ -28,6 +28,7 @@
                         android:id="@+id/iv_avatar"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:background="@color/gray"
                         android:layout_marginRight="@dimen/common_margin_8dp"/>
 
                 <LinearLayout
@@ -129,6 +130,13 @@
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size"
                             android:text="@string/account_edit_profile"/>
+
+                    <Button
+                            android:id="@+id/btn_sign_out"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size"
+                            android:text="@string/account_log_out"/>
                 </LinearLayout>
             </LinearLayout>
 

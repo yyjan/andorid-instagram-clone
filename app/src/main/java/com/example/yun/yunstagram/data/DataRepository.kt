@@ -16,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 
 
@@ -39,12 +40,20 @@ class DataRepository : DataSource {
         return RxFirebaseAuth.createUserWithEmailAndPassword(auth, email, password)
     }
 
+    override fun signOut(): Completable {
+        return RxFirebaseAuth.signOut(auth)
+    }
+
     override fun updateUser(user: User): Completable {
         return RxFirebaseFirestore.set(usersCollection.document(user.uid!!), user)
     }
 
     override fun getUser(uid: String): Single<Value<DocumentSnapshot>> {
         return RxFirebaseFirestore.data(usersCollection.document(uid))
+    }
+
+    override fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
     }
 
     override fun getCurrentUid(): String? {
