@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileBinding
+import com.example.yun.yunstagram.ui.adapters.PostAdapter
 import com.example.yun.yunstagram.ui.auth.AuthActivity
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
@@ -23,7 +24,7 @@ class ProfileFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var viewModel: ProfileViewModel
 
     companion object {
         fun newInstance() = ProfileFragment()
@@ -32,16 +33,16 @@ class ProfileFragment : DaggerFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        profileViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel::class.java)
 
         val binding = DataBindingUtil.inflate<FragmentProfileBinding>(
             inflater, R.layout.fragment_profile, container, false
         ).apply {
-            viewmodel = profileViewModel
+            viewmodel = viewModel
             lifecycleOwner = this@ProfileFragment
         }
 
-        profileViewModel.user.observe(this, Observer {
+        viewModel.user.observe(this, Observer {
             binding.user = it
 
             GlideApp.with(this)
@@ -49,25 +50,31 @@ class ProfileFragment : DaggerFragment() {
                 .into(iv_avatar)
         })
 
-        profileViewModel.logOutState.observe(this, Observer { isLogOut ->
+        viewModel.logOutState.observe(this, Observer { isLogOut ->
             if (isLogOut) {
                 activity?.finish()
                 startActivity(Intent(activity, AuthActivity::class.java))
             }
         })
 
+        val adapter = PostAdapter()
+        binding.listPost.adapter = adapter
+        subscribeUi(adapter)
+
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         fetchUserData()
+        viewModel.fetchPosts()
 
         btn_edit_profile.setOnClickListener {
             startActivityForResult(Intent(activity, ProfileEditActivity::class.java), REQUEST_CODE_FOR_PROFILE_EDIT)
         }
         btn_sign_out.setOnClickListener {
-            profileViewModel.logOut()
+            viewModel.logOut()
         }
 
     }
@@ -82,7 +89,15 @@ class ProfileFragment : DaggerFragment() {
         }
     }
 
-    private fun fetchUserData() {
-        profileViewModel.fetchUserData()
+    private fun subscribeUi(adapter: PostAdapter) {
+        viewModel.posts.observe(this, Observer { posts ->
+            if (posts.isNotEmpty()) adapter.submitList(posts)
+        })
     }
+
+
+    private fun fetchUserData() {
+        viewModel.fetchUserData()
+    }
+
 }

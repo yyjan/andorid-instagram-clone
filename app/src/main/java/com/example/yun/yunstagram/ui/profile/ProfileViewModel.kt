@@ -3,10 +3,7 @@ package com.example.yun.yunstagram.ui.profile
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.yun.yunstagram.data.DataRepository
-import com.example.yun.yunstagram.data.DataSource
-import com.example.yun.yunstagram.data.State
-import com.example.yun.yunstagram.data.User
+import com.example.yun.yunstagram.data.*
 import com.example.yun.yunstagram.ui.BaseViewModel
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
@@ -16,6 +13,10 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
     private val _user = MutableLiveData<User>()
     val user: LiveData<User>
         get() = _user
+
+    private val _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>>
+        get() = _posts
 
     private val _updateResult = MutableLiveData<State>()
     val updateResult: LiveData<State>
@@ -36,6 +37,18 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
             .compose(loadingSingleTransformer())
             .subscribe({
                 _user.value = it.value().toObject(User::class.java)
+            }) {
+                it.printStackTrace()
+            }
+    }
+
+    fun fetchPosts() {
+        val uid = repository.getCurrentUid()
+        if (uid.isNullOrEmpty()) return
+        disposables += repository.getMyPosts(uid)
+            .compose(loadingSingleTransformer())
+            .subscribe({ queryDocumentSnapshots ->
+                _posts.value = queryDocumentSnapshots.value().toObjects(Post::class.java)
             }) {
                 it.printStackTrace()
             }
