@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -62,6 +63,12 @@ class DataRepository : DataSource {
 
     override fun updatePost(post: Post): Completable {
         return RxFirebaseFirestore.set(postsCollection.document(), post)
+    }
+
+    override fun getMyPosts(author: String): Single<Value<QuerySnapshot>> {
+        return RxFirebaseFirestore.data(
+            postsCollection.whereEqualTo("author", author)
+        )
     }
 
     private fun setLoggedInUser(loggedInUser: FirebaseUser?) {

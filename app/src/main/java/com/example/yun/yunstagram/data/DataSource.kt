@@ -4,6 +4,7 @@ import android.net.Uri
 import com.androidhuman.rxfirebase2.firestore.model.Value
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -25,6 +26,8 @@ interface DataSource {
     fun uploadFile(uri: Uri, callback: UploadCallback)
 
     fun updatePost(post: Post): Completable
+
+    fun getMyPosts(author: String): Single<Value<QuerySnapshot>>
 
     interface UploadCallback {
         fun onSuccess(downloadUri: String)
