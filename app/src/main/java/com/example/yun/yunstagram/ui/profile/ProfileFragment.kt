@@ -14,6 +14,7 @@ import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileBinding
 import com.example.yun.yunstagram.ui.adapters.PostAdapter
 import com.example.yun.yunstagram.ui.auth.AuthActivity
+import com.example.yun.yunstagram.ui.post.PostDetailActivity
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -57,7 +58,11 @@ class ProfileFragment : DaggerFragment() {
             }
         })
 
-        val adapter = PostAdapter()
+        viewModel.openPost.observe(this, Observer { postId ->
+            openPostDetails(postId)
+        })
+
+        val adapter = PostAdapter(viewModel)
         binding.listPost.adapter = adapter
         subscribeUi(adapter)
 
@@ -95,9 +100,16 @@ class ProfileFragment : DaggerFragment() {
         })
     }
 
-
     private fun fetchUserData() {
         viewModel.fetchUserData()
+    }
+
+    fun openPostDetails(postId: String) {
+        val intent = Intent(activity, PostDetailActivity::class.java).apply {
+            putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
+        }
+        startActivity(intent)
+
     }
 
 }

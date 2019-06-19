@@ -22,6 +22,7 @@ import io.reactivex.Single
 
 
 class DataRepository : DataSource {
+
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -63,6 +64,10 @@ class DataRepository : DataSource {
 
     override fun updatePost(post: Post): Completable {
         return RxFirebaseFirestore.set(postsCollection.document(), post)
+    }
+
+    override fun getPost(id: String): Single<Value<DocumentSnapshot>> {
+        return RxFirebaseFirestore.data(postsCollection.document(id))
     }
 
     override fun getMyPosts(author: String): Single<Value<QuerySnapshot>> {

@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yun.yunstagram.data.Post
 import com.example.yun.yunstagram.databinding.ListItemPostBinding
+import com.example.yun.yunstagram.ui.post.PostItemUserActionsListener
+import com.example.yun.yunstagram.ui.profile.ProfileViewModel
 
-class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()) {
+class PostAdapter(private val viewModel: ProfileViewModel) : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = getItem(position)
@@ -21,7 +23,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ListItemPostBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false))
+                LayoutInflater.from(parent.context), parent, false), viewModel)
     }
 
     private fun createOnClickListener(postId: String?): View.OnClickListener {
@@ -31,12 +33,20 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
     }
 
     class ViewHolder(
-        private val binding: ListItemPostBinding
+        private val binding: ListItemPostBinding,
+        private val viewModel: ProfileViewModel
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(listener: View.OnClickListener, item: Post) {
+            val userActionsListener = object : PostItemUserActionsListener {
+                override fun onPostClicked(post: Post) {
+                    viewModel.openPost(post.id)
+                }
+            }
+
             binding.apply {
                 clickListener = listener
+                actionsListener = userActionsListener
                 post = item
                 executePendingBindings()
             }

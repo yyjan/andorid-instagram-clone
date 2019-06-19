@@ -14,4 +14,6 @@
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_16sp">14sp</dimen>
 
+    <dimen name="view_divider_height">0.5dp</dimen>
+
 </resources>

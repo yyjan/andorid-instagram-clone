@@ -22,6 +22,17 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     val updateResult: LiveData<State>
         get() = _updateResult
 
+    fun fetchPost(id: String?) {
+        if (id.isNullOrEmpty()) return
+        disposables += repository.getPost(id)
+            .compose(loadingSingleTransformer())
+            .subscribe({
+                _post.value = it.value().toObject(Post::class.java)
+            }) {
+                it.printStackTrace()
+            }
+    }
+
     fun updatePost(post: Post) {
         disposables += repository.updatePost(post)
             .compose(loadingCompletableTransformer())
@@ -40,7 +51,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
 
             override fun onSuccess(downloadUri: String) {
-                _post.value = Post(picture_url=downloadUri)
+                _post.value = Post(picture_url = downloadUri)
             }
         })
     }

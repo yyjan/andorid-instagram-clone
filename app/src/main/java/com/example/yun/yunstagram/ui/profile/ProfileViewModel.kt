@@ -30,6 +30,10 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
     val uploadImageResult: LiveData<State>
         get() = _uploadImageResult
 
+    private val _openPost = MutableLiveData<String>()
+    val openPost: LiveData<String>
+        get() = _openPost
+
     fun fetchUserData() {
         val uid = repository.getCurrentUid()
         if (uid.isNullOrEmpty()) return
@@ -54,7 +58,7 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
             }
     }
 
-    fun logOut(){
+    fun logOut() {
         disposables += repository.signOut()
             .subscribe({
                 _logOutState.postValue(true)
@@ -94,6 +98,10 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
                 updateUserProfileImage(convertUser())
             }
         })
+    }
+
+    fun openPost(postId: String?) {
+        _openPost.value = postId
     }
 
     fun makeUser(username: String, website: String, bio: String): User {
