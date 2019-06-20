@@ -27,6 +27,8 @@ interface DataSource {
 
     fun updatePost(post: Post): Completable
 
+    fun createPost(post: Post): Completable
+
     fun getPost(id: String): Single<Value<DocumentSnapshot>>
 
     fun getMyPosts(author: String): Single<Value<QuerySnapshot>>

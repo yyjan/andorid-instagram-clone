@@ -25,8 +25,15 @@ class PostEditFragment : DaggerFragment() {
 
     private lateinit var viewModel: PostViewModel
 
+    private var postId: String? = null
+
     companion object {
-        fun newInstance() = PostEditFragment()
+        const val ARGUMENT_POST_ID = "POST_ID"
+        fun newInstance(taskId: String) = PostEditFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARGUMENT_POST_ID, taskId)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -49,15 +56,20 @@ class PostEditFragment : DaggerFragment() {
         })
 
         viewModel.post.observe(this, Observer {
+            binding.post = it
             showProfileImage(viewModel.post.value?.picture_url)
         })
 
         setHasOptionsMenu(true)
+        setupIntent()
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        viewModel.setEditState(postId)
+        viewModel.fetchPost(postId)
 
         btn_edit_image.setOnClickListener {
             getPhotoImages()
@@ -69,6 +81,7 @@ class PostEditFragment : DaggerFragment() {
             R.id.action_share -> {
                 val messages = et_message.text.toString()
                 val post = viewModel.makePost(messages)
+
                 viewModel.updatePost(post)
                 true
             }
@@ -91,6 +104,10 @@ class PostEditFragment : DaggerFragment() {
                 photoUri?.let { viewModel.updateImage(it) }
             }
         }
+    }
+
+    private fun setupIntent() {
+        postId = arguments?.getString(PostDetailFragment.ARGUMENT_POST_ID)
     }
 
     private fun showProfileImage(url: String?) {

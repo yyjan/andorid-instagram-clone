@@ -20,7 +20,7 @@
                 android:label="@string/title_edit_profile"/>
 
         <activity android:name=".ui.post.PostEditActivity"
-                  android:label="@string/title_post_edit"/>
+                  android:label="@string/title_post_create"/>
 
         <activity android:name=".ui.post.PostDetailActivity"
                   android:label="@string/title_post_detail"/>

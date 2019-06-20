@@ -104,7 +104,7 @@ class ProfileFragment : DaggerFragment() {
         viewModel.fetchUserData()
     }
 
-    fun openPostDetails(postId: String) {
+    private fun openPostDetails(postId: String) {
         val intent = Intent(activity, PostDetailActivity::class.java).apply {
             putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
         }

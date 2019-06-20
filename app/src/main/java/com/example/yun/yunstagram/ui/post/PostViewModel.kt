@@ -22,6 +22,8 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     val updateResult: LiveData<State>
         get() = _updateResult
 
+    private var editState = false
+
     fun fetchPost(id: String?) {
         if (id.isNullOrEmpty()) return
         disposables += repository.getPost(id)
@@ -33,7 +35,17 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
-    fun updatePost(post: Post) {
+    private fun editPost(post: Post) {
+        disposables += repository.updatePost(post)
+            .compose(loadingCompletableTransformer())
+            .subscribe({
+                _updateResult.value = State(isSuccess = true)
+            }) {
+                _updateResult.value = State(errorMessages = it.message)
+            }
+    }
+
+    private fun createPost(post: Post) {
         disposables += repository.updatePost(post)
             .compose(loadingCompletableTransformer())
             .subscribe({
@@ -56,7 +68,27 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
         })
     }
 
+    fun setEditState(postId: String?){
+        editState = postId != null
+    }
+
+    fun updatePost(post: Post) {
+        return if (editState) {
+            editPost(post)
+        } else {
+            createPost(post)
+        }
+    }
+
     fun makePost(messages: String): Post {
+        return if (editState) {
+            makeEditPost(messages)
+        } else {
+            makeNewPost(messages)
+        }
+    }
+
+    private fun makeNewPost(messages: String): Post {
         val uid = repository.getCurrentUid()
         val time = getLocalDateTime()
         val id = uid + "_" + time
@@ -66,6 +98,20 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             author = uid,
             message = messages,
             picture_url = post.value?.picture_url
+        )
+    }
+
+    private fun makeEditPost(messages: String): Post {
+        val uid = repository.getCurrentUid()
+        val time = getLocalDateTime()
+        return Post(
+            id = post.value?.id,
+            created_time = post.value?.created_time,
+            updated_time = time,
+            author = uid,
+            message = messages,
+            picture_url = post.value?.picture_url
+
         )
     }
 

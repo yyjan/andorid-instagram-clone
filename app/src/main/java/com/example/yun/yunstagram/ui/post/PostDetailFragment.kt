@@ -1,5 +1,6 @@
 package com.example.yun.yunstagram.ui.post
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +11,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentPostDetailBinding
+import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_post_edit.*
+import kotlinx.android.synthetic.main.fragment_post_detail.*
 import javax.inject.Inject
 
 class PostDetailFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var postId: String
 
     companion object {
         const val ARGUMENT_POST_ID = "POST_ID"
@@ -45,12 +48,46 @@ class PostDetailFragment : DaggerFragment() {
             binding.post = it
         })
 
+        setupIntent()
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.fetchPost(arguments?.getString(ARGUMENT_POST_ID))
+        fetchPostData()
+
+        iv_more.setOnClickListener {
+            openPostEdit(postId)
+        }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_CODE_FOR_PROFILE_EDIT -> {
+                fetchPostData()
+            }
+        }
+    }
+
+    private fun setupIntent() {
+        arguments?.let {
+            postId = it.getString(ARGUMENT_POST_ID)
+        }
+    }
+
+    private fun fetchPostData() {
+        viewModel.fetchPost(postId)
+    }
+
+    private fun openPostEdit(postId: String) {
+        val intent = Intent(activity, PostEditActivity::class.java).apply {
+            putExtra(PostEditActivity.EXTRA_POST_ID, postId)
+        }
+        startActivityForResult(intent, REQUEST_CODE_FOR_PROFILE_EDIT)
+    }
+
+
 }

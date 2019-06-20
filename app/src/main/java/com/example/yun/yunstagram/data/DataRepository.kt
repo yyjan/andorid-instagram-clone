@@ -63,6 +63,10 @@ class DataRepository : DataSource {
     }
 
     override fun updatePost(post: Post): Completable {
+        return RxFirebaseFirestore.set(postsCollection.document(post.id!!), post)
+    }
+
+    override fun createPost(post: Post): Completable {
         return RxFirebaseFirestore.set(postsCollection.document(), post)
     }
 

@@ -32,7 +32,8 @@
     <string name="profile_change_photo">Change Profile Photo</string>
 
     <!-- Post -->
-    <string name="title_post_edit">New Post</string>
+    <string name="title_post_create">New Post</string>
+    <string name="title_post_edit">Edit Info</string>
     <string name="title_post_detail">Photo</string>
     <string name="edit_post_hint">Write a caption..</string>
     <string name="edit_post_image">Edit</string>
