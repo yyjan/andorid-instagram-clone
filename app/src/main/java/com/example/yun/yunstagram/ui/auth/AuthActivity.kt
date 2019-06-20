@@ -14,7 +14,7 @@ class AuthActivity : DaggerAppCompatActivity() {
 
         setContentView(R.layout.activity_auth)
 
-        replaceFragmentInActivity(findOrCreateViewFragment(), R.id.contentFrame)
+        replaceFragmentInActivity(findOrCreateViewFragment(), R.id.contentFrame, "AuthFragment")
     }
 
     private fun findOrCreateViewFragment() =

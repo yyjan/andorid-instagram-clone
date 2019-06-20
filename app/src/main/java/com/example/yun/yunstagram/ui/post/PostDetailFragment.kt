@@ -1,10 +1,13 @@
 package com.example.yun.yunstagram.ui.post
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -48,6 +51,15 @@ class PostDetailFragment : DaggerFragment() {
             binding.post = it
         })
 
+        viewModel.deleteState.observe(this, Observer { state ->
+            if (state.isSuccess) {
+                activity?.setResult(Activity.RESULT_OK)
+                activity?.finish()
+            } else {
+                Toast.makeText(activity, state.errorMessages, Toast.LENGTH_SHORT).show()
+            }
+        })
+
         setupIntent()
         return binding.root
     }
@@ -58,7 +70,7 @@ class PostDetailFragment : DaggerFragment() {
         fetchPostData()
 
         iv_more.setOnClickListener {
-            openPostEdit(postId)
+            showMenuDialog()
         }
     }
 
@@ -78,6 +90,25 @@ class PostDetailFragment : DaggerFragment() {
         }
     }
 
+    private fun showMenuDialog() {
+        context?.let {
+            val builder = AlertDialog.Builder(it)
+            val menus = arrayOf("Edit", "Delete")
+            builder.setItems(menus) { dialog, which ->
+                when (which) {
+                    0 -> {
+                        openPostEdit(postId)
+                    }
+                    1 -> {
+                        viewModel.deletePost(postId)
+                    }
+                }
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
+    }
+
     private fun fetchPostData() {
         viewModel.fetchPost(postId)
     }
@@ -88,6 +119,5 @@ class PostDetailFragment : DaggerFragment() {
         }
         startActivityForResult(intent, REQUEST_CODE_FOR_PROFILE_EDIT)
     }
-
 
 }

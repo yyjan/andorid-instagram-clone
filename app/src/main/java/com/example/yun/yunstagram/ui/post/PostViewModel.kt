@@ -18,9 +18,17 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     val post: LiveData<Post>
         get() = _post
 
+    private val _downloadUri = MutableLiveData<String>()
+    val downloadUri: LiveData<String>
+        get() = _downloadUri
+
     private val _updateResult = MutableLiveData<State>()
     val updateResult: LiveData<State>
         get() = _updateResult
+
+    private val _deleteState = MutableLiveData<State>()
+    val deleteState: LiveData<State>
+        get() = _deleteState
 
     private var editState = false
 
@@ -55,6 +63,16 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
+    fun deletePost(id: String) {
+        disposables += repository.deletePost(id)
+            .compose(loadingCompletableTransformer())
+            .subscribe({
+                _deleteState.value = State(isSuccess = true)
+            }) {
+                _deleteState.value = State(errorMessages = it.message)
+            }
+    }
+
     fun updateImage(uri: Uri) {
         // TODO: add disposables
         repository.uploadFile(uri, object : DataSource.UploadCallback {
@@ -63,12 +81,12 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
 
             override fun onSuccess(downloadUri: String) {
-                _post.value = Post(picture_url = downloadUri)
+                _downloadUri.value = downloadUri
             }
         })
     }
 
-    fun setEditState(postId: String?){
+    fun setEditState(postId: String?) {
         editState = postId != null
     }
 

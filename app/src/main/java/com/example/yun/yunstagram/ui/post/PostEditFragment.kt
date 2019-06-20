@@ -14,6 +14,7 @@ import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentPostEditBinding
 import com.example.yun.yunstagram.utilities.Constants
+import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_IMAGE
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_post_edit.*
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class PostEditFragment : DaggerFragment() {
 
     companion object {
         const val ARGUMENT_POST_ID = "POST_ID"
-        fun newInstance(taskId: String) = PostEditFragment().apply {
+        fun newInstance(taskId: String?) = PostEditFragment().apply {
             arguments = Bundle().apply {
                 putString(ARGUMENT_POST_ID, taskId)
             }
@@ -49,6 +50,7 @@ class PostEditFragment : DaggerFragment() {
 
         viewModel.updateResult.observe(this, Observer { state ->
             if (state.isSuccess) {
+                activity?.setResult(Activity.RESULT_OK)
                 activity?.finish()
             } else {
                 Toast.makeText(activity, state.errorMessages, Toast.LENGTH_SHORT).show()
@@ -99,7 +101,7 @@ class PostEditFragment : DaggerFragment() {
         if (resultCode != Activity.RESULT_OK) return
 
         when (requestCode) {
-            Constants.REQUEST_CODE_FOR_IMAGE -> {
+            REQUEST_CODE_FOR_IMAGE -> {
                 val photoUri = data?.data
                 photoUri?.let { viewModel.updateImage(it) }
             }
@@ -119,6 +121,6 @@ class PostEditFragment : DaggerFragment() {
         val intent = Intent()
         intent.type = MediaStore.Images.Media.CONTENT_TYPE
         intent.action = Intent.ACTION_PICK
-        startActivityForResult(Intent.createChooser(intent, "파일 선택"), Constants.REQUEST_CODE_FOR_IMAGE)
+        startActivityForResult(Intent.createChooser(intent, "파일 선택"), REQUEST_CODE_FOR_IMAGE)
     }
 }

@@ -70,6 +70,10 @@ class DataRepository : DataSource {
         return RxFirebaseFirestore.set(postsCollection.document(), post)
     }
 
+    override fun deletePost(id: String): Completable {
+        return RxFirebaseFirestore.delete(postsCollection.document(id))
+    }
+
     override fun getPost(id: String): Single<Value<DocumentSnapshot>> {
         return RxFirebaseFirestore.data(postsCollection.document(id))
     }

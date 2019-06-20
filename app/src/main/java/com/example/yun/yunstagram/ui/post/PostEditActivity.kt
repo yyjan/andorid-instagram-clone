@@ -13,7 +13,7 @@ class PostEditActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_edit)
 
-        postId = intent.getStringExtra(EXTRA_POST_ID)
+        setupIntent()
 
         setupActionBar(R.id.toolbar) {
             setDisplayHomeAsUpEnabled(true)
@@ -28,8 +28,14 @@ class PostEditActivity : DaggerAppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, PostEditFragment.newInstance(intent.getStringExtra(EXTRA_POST_ID)))
+                .replace(R.id.container, PostEditFragment.newInstance(postId))
                 .commitNow()
+        }
+    }
+
+    fun setupIntent() {
+        intent?.let {
+            postId = intent.getStringExtra(EXTRA_POST_ID)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.yun.yunstagram.ui.profile
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.example.yun.yunstagram.databinding.FragmentProfileBinding
 import com.example.yun.yunstagram.ui.adapters.PostAdapter
 import com.example.yun.yunstagram.ui.auth.AuthActivity
 import com.example.yun.yunstagram.ui.post.PostDetailActivity
+import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -73,10 +75,10 @@ class ProfileFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
 
         fetchUserData()
-        viewModel.fetchPosts()
+        fetchPostData()
 
         btn_edit_profile.setOnClickListener {
-            startActivityForResult(Intent(activity, ProfileEditActivity::class.java), REQUEST_CODE_FOR_PROFILE_EDIT)
+            openProfileEdit()
         }
         btn_sign_out.setOnClickListener {
             viewModel.logOut()
@@ -91,6 +93,14 @@ class ProfileFragment : DaggerFragment() {
             REQUEST_CODE_FOR_PROFILE_EDIT -> {
                 fetchUserData()
             }
+            REQUEST_CODE_FOR_POST_EDIT -> {
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        fetchPostData()
+                    }
+                }
+            }
+
         }
     }
 
@@ -104,12 +114,19 @@ class ProfileFragment : DaggerFragment() {
         viewModel.fetchUserData()
     }
 
+    private fun fetchPostData() {
+        viewModel.fetchPosts()
+    }
+
+    private fun openProfileEdit() {
+        startActivityForResult(Intent(activity, ProfileEditActivity::class.java), REQUEST_CODE_FOR_PROFILE_EDIT)
+    }
+
     private fun openPostDetails(postId: String) {
         val intent = Intent(activity, PostDetailActivity::class.java).apply {
             putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
         }
-        startActivity(intent)
-
+        startActivityForResult(intent, REQUEST_CODE_FOR_POST_EDIT)
     }
 
 }

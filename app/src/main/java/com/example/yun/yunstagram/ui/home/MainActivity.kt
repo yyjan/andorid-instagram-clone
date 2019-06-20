@@ -7,6 +7,7 @@ import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.utilities.replaceFragmentInActivity
 import com.example.yun.yunstagram.ui.post.PostEditActivity
 import com.example.yun.yunstagram.ui.profile.ProfileFragment
+import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
 
@@ -15,7 +16,7 @@ class MainActivity : DaggerAppCompatActivity() {
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                replaceFragment(HomeFragment.newInstance())
+                replaceFragment(HomeFragment.newInstance(), "HomeFragment")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search -> {
@@ -29,7 +30,7 @@ class MainActivity : DaggerAppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_account -> {
-                replaceFragment(ProfileFragment.newInstance())
+                replaceFragment(ProfileFragment.newInstance(), "ProfileFragment")
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -43,14 +44,20 @@ class MainActivity : DaggerAppCompatActivity() {
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         navView.itemIconTintList = null
-        replaceFragment(HomeFragment.newInstance())
+        replaceFragment(HomeFragment.newInstance(), "HomeFragment")
     }
 
-    private fun replaceFragment(fragment: Fragment) {
-        replaceFragmentInActivity(fragment, R.id.contentFrame)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val fragment = supportFragmentManager.findFragmentByTag("ProfileFragment")
+        fragment?.onActivityResult(requestCode, resultCode, intent)
     }
 
-    private fun openActivity(intent: Intent){
-        startActivity(Intent(this, PostEditActivity::class.java))
+    private fun replaceFragment(fragment: Fragment, tag: String) {
+        replaceFragmentInActivity(fragment, R.id.contentFrame, tag)
+    }
+
+    private fun openActivity(intent: Intent) {
+        startActivityForResult(Intent(this, PostEditActivity::class.java), REQUEST_CODE_FOR_POST_EDIT)
     }
 }
