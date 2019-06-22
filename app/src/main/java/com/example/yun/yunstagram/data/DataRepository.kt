@@ -3,7 +3,6 @@ package com.example.yun.yunstagram.data
 import android.net.Uri
 import com.androidhuman.rxfirebase2.auth.RxFirebaseAuth
 import com.androidhuman.rxfirebase2.firestore.RxFirebaseFirestore
-import com.androidhuman.rxfirebase2.firestore.RxFirebaseFirestore.update
 import com.androidhuman.rxfirebase2.firestore.model.Value
 import com.example.yun.yunstagram.utilities.Constants
 import com.google.android.gms.tasks.Continuation
@@ -17,7 +16,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Single
 
 
@@ -64,6 +62,10 @@ class DataRepository : DataSource {
 
     override fun updatePost(post: Post): Completable {
         return RxFirebaseFirestore.set(postsCollection.document(post.id!!), post)
+    }
+
+    override fun updatePostValue(id: String, value: Map<String, Any?>): Completable {
+        return RxFirebaseFirestore.update(postsCollection.document(id), value)
     }
 
     override fun createPost(post: Post): Completable {

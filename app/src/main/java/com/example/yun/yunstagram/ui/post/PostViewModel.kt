@@ -3,10 +3,7 @@ package com.example.yun.yunstagram.ui.post
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.yun.yunstagram.data.DataRepository
-import com.example.yun.yunstagram.data.DataSource
-import com.example.yun.yunstagram.data.Post
-import com.example.yun.yunstagram.data.State
+import com.example.yun.yunstagram.data.*
 import com.example.yun.yunstagram.utilities.getLocalDateTime
 import com.example.yun.yunstagram.ui.BaseViewModel
 import io.reactivex.rxkotlin.plusAssign
@@ -53,7 +50,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
-    private fun createPost(post: Post) {
+    fun updatePost(post: Post) {
         disposables += repository.updatePost(post)
             .compose(loadingCompletableTransformer())
             .subscribe({
@@ -61,6 +58,18 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }) {
                 _updateResult.value = State(errorMessages = it.message)
             }
+    }
+
+    fun updatePostValue(id: String?, value: Map<String, Any?>) {
+        id?.let {
+            disposables += repository.updatePostValue(id, value)
+                .compose(loadingCompletableTransformer())
+                .subscribe({
+                    _updateResult.value = State(isSuccess = true)
+                }) {
+                    _updateResult.value = State(errorMessages = it.message)
+                }
+        }
     }
 
     fun deletePost(id: String) {
@@ -90,20 +99,18 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
         editState = postId != null
     }
 
-    fun updatePost(post: Post) {
-        return if (editState) {
-            editPost(post)
-        } else {
-            createPost(post)
-        }
-    }
-
     fun makePost(messages: String): Post {
         return if (editState) {
             makeEditPost(messages)
         } else {
             makeNewPost(messages)
         }
+    }
+
+    fun onClickLike(post: Post){
+        val likeCount = mutableMapOf<String, Any?>()
+        likeCount["like_count"] = post.like_count?.plus(1)
+        updatePostValue(post.id, likeCount)
     }
 
     private fun makeNewPost(messages: String): Post {
@@ -128,7 +135,8 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             updated_time = time,
             author = uid,
             message = messages,
-            picture_url = post.value?.picture_url
+            picture_url = post.value?.picture_url,
+            like_count = post.value?.like_count
 
         )
     }

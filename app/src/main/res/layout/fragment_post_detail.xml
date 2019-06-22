@@ -6,6 +6,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View.OnClickListener" />
         <variable name="viewmodel" type="com.example.yun.yunstagram.ui.post.PostViewModel"/>
         <variable name="post" type="com.example.yun.yunstagram.data.Post"/>
     </data>
@@ -84,13 +85,15 @@
                     android:layout_height="24dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:src="@drawable/ic_favorite_24dp"/>
+                    android:src="@drawable/ic_favorite_24dp"
+                    android:onClick="@{() -> viewmodel.onClickLike(post)}"/>
 
             <TextView
                     android:id="@+id/tv_likes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/common_margin_16dp"
+                    android:text="@{String.valueOf(post.like_count)}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/iv_like"
                     app:layout_constraintBottom_toBottomOf="parent"

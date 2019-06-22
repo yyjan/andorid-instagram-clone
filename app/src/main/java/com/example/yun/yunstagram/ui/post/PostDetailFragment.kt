@@ -51,6 +51,12 @@ class PostDetailFragment : DaggerFragment() {
             binding.post = it
         })
 
+        viewModel.updateResult.observe(this, Observer { state ->
+            if (state.isSuccess) {
+                fetchPostData()
+            }
+        })
+
         viewModel.deleteState.observe(this, Observer { state ->
             if (state.isSuccess) {
                 activity?.setResult(Activity.RESULT_OK)

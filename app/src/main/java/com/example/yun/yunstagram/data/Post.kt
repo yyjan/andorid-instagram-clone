@@ -6,7 +6,7 @@ data class Post(
     var updated_time: String? = null,
     var message: String? = null,
     var isHidden: Boolean = false,
-    var like_count: Int = 0,
+    var like_count: Int? = 0,
     var username: String? = null,
     var author: String? = null,
     var picture_url: String? = null

@@ -27,6 +27,8 @@ interface DataSource {
 
     fun updatePost(post: Post): Completable
 
+    fun updatePostValue(id: String, value: Map<String, Any?>): Completable
+
     fun createPost(post: Post): Completable
 
     fun deletePost(id: String): Completable
