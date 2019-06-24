@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +16,9 @@ import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentPostEditBinding
 import com.example.yun.yunstagram.utilities.Constants
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_IMAGE
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.activity_post_edit.*
 import kotlinx.android.synthetic.main.fragment_post_edit.*
 import javax.inject.Inject
 
@@ -57,9 +60,12 @@ class PostEditFragment : DaggerFragment() {
             }
         })
 
+        viewModel.downloadUri.observe(this, Observer {
+            showProfileImage(it)
+        })
+
         viewModel.post.observe(this, Observer {
             binding.post = it
-            showProfileImage(viewModel.post.value?.picture_url)
         })
 
         setHasOptionsMenu(true)
@@ -74,20 +80,18 @@ class PostEditFragment : DaggerFragment() {
         viewModel.fetchPost(postId)
 
         btn_edit_image.setOnClickListener {
-            getPhotoImages()
+            showPhotoChooser()
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_share -> {
-                val messages = et_message.text.toString()
-                val post = viewModel.makePost(messages)
+                updateData()
 
-                viewModel.updatePost(post)
                 true
             }
-            else -> false
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -103,7 +107,7 @@ class PostEditFragment : DaggerFragment() {
         when (requestCode) {
             REQUEST_CODE_FOR_IMAGE -> {
                 val photoUri = data?.data
-                photoUri?.let { viewModel.updateImage(it) }
+                photoUri?.let { viewModel.uploadImage(it) }
             }
         }
     }
@@ -112,12 +116,28 @@ class PostEditFragment : DaggerFragment() {
         postId = arguments?.getString(PostDetailFragment.ARGUMENT_POST_ID)
     }
 
+    private fun updateData() {
+        with(viewModel) {
+            if (isImageUpload()) {
+                val messages = et_message.text.toString()
+                viewModel.sharePost(messages)
+            } else {
+                showMessage(R.string.message_post_image_upload)
+            }
+        }
+    }
+
+
     private fun showProfileImage(url: String?) {
         GlideApp.with(this).load(url)
             .into(iv_image)
     }
 
-    private fun getPhotoImages() {
+    private fun showMessage(message: Int) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showPhotoChooser() {
         val intent = Intent()
         intent.type = MediaStore.Images.Media.CONTENT_TYPE
         intent.action = Intent.ACTION_PICK

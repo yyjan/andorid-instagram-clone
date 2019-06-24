@@ -37,5 +37,6 @@
     <string name="title_post_detail">Photo</string>
     <string name="edit_post_hint">Write a caption..</string>
     <string name="edit_post_image">Edit</string>
+    <string name="message_post_image_upload">Please upload image file</string>
 
 </resources>

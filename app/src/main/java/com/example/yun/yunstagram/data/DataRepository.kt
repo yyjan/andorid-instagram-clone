@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -68,8 +69,8 @@ class DataRepository : DataSource {
         return RxFirebaseFirestore.update(postsCollection.document(id), value)
     }
 
-    override fun createPost(post: Post): Completable {
-        return RxFirebaseFirestore.set(postsCollection.document(), post)
+    override fun createPost(post: Post): Single<DocumentReference> {
+        return RxFirebaseFirestore.add(postsCollection, post)
     }
 
     override fun deletePost(id: String): Completable {

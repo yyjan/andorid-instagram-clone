@@ -40,10 +40,12 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
-    private fun editPost(post: Post) {
-        disposables += repository.updatePost(post)
-            .compose(loadingCompletableTransformer())
+    fun createPost(post: Post) {
+        disposables += repository.createPost(post)
             .subscribe({
+                val postMap = mutableMapOf<String, Any?>()
+                postMap["id"] = it.id
+                updatePostValue(it.id, postMap)
                 _updateResult.value = State(isSuccess = true)
             }) {
                 _updateResult.value = State(errorMessages = it.message)
@@ -60,7 +62,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
-    fun updatePostValue(id: String?, value: Map<String, Any?>) {
+    private fun updatePostValue(id: String?, value: Map<String, Any?>) {
         id?.let {
             disposables += repository.updatePostValue(id, value)
                 .compose(loadingCompletableTransformer())
@@ -82,47 +84,50 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
-    fun updateImage(uri: Uri) {
+    fun uploadImage(uri: Uri) {
         // TODO: add disposables
+        _loadingState.postValue(true)
         repository.uploadFile(uri, object : DataSource.UploadCallback {
             override fun onFailed(messages: String) {
-                // TODO: error
+                _loadingState.postValue(false)
+                _updateResult.value = State(errorMessages = messages)
             }
 
             override fun onSuccess(downloadUri: String) {
                 _downloadUri.value = downloadUri
+                _loadingState.postValue(false)
             }
         })
     }
+
+    fun isImageUpload() = (post.value?.picture_url != null || downloadUri.value != null)
 
     fun setEditState(postId: String?) {
         editState = postId != null
     }
 
-    fun makePost(messages: String): Post {
+    fun sharePost(messages: String) {
         return if (editState) {
-            makeEditPost(messages)
+            updatePost(makeEditPost(messages))
         } else {
-            makeNewPost(messages)
+            createPost(makeNewPost(messages))
         }
     }
 
-    fun onClickLike(post: Post){
-        val likeCount = mutableMapOf<String, Any?>()
-        likeCount["like_count"] = post.like_count?.plus(1)
-        updatePostValue(post.id, likeCount)
+    fun onClickLike(post: Post) {
+        val postMap = mutableMapOf<String, Any?>()
+        postMap["like_count"] = post.like_count?.plus(1)
+        updatePostValue(post.id, postMap)
     }
 
-    private fun makeNewPost(messages: String): Post {
+    private fun makeNewPost(messages: String = ""): Post {
         val uid = repository.getCurrentUid()
         val time = getLocalDateTime()
-        val id = uid + "_" + time
         return Post(
-            id = id,
             created_time = time,
             author = uid,
             message = messages,
-            picture_url = post.value?.picture_url
+            picture_url = downloadUri.value
         )
     }
 
@@ -137,7 +142,6 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             message = messages,
             picture_url = post.value?.picture_url,
             like_count = post.value?.like_count
-
         )
     }
 

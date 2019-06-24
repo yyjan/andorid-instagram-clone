@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 open class BaseViewModel : ViewModel() {
     protected val disposables = CompositeDisposable()
 
-    private val _loadingState = MutableLiveData<Boolean>()
+    val _loadingState = MutableLiveData<Boolean>()
     val loadingState: LiveData<Boolean>
         get() = _loadingState
 

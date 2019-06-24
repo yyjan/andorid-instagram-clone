@@ -3,6 +3,7 @@ package com.example.yun.yunstagram.data
 import android.net.Uri
 import com.androidhuman.rxfirebase2.firestore.model.Value
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.Completable
@@ -29,7 +30,7 @@ interface DataSource {
 
     fun updatePostValue(id: String, value: Map<String, Any?>): Completable
 
-    fun createPost(post: Post): Completable
+    fun createPost(post: Post): Single<DocumentReference>
 
     fun deletePost(id: String): Completable
 
