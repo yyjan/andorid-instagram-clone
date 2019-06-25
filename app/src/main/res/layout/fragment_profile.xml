@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <import type="android.view.View"/>
+        <import type="android.view.View.OnClickListener"/>
         <variable name="viewmodel" type="com.example.yun.yunstagram.ui.profile.ProfileViewModel"/>
         <variable name="user" type="com.example.yun.yunstagram.data.User"/>
     </data>
@@ -54,6 +55,18 @@
                                     android:layout_height="wrap_content">
 
                                 <TextView
+                                        android:id="@+id/tv_repositories"
+                                        android:padding="@dimen/common_padding_6dp"
+                                        android:layout_weight="1"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:textStyle="bold"
+                                        android:textSize="14sp"
+                                        android:text="@{String.valueOf(viewmodel.posts.size())}"
+                                        tools:text="10"/>
+
+                                <TextView
                                         android:id="@+id/tv_followers"
                                         android:layout_weight="1"
                                         android:layout_width="0dp"
@@ -62,7 +75,7 @@
                                         android:gravity="center"
                                         android:textStyle="bold"
                                         android:textSize="14sp"
-                                        android:text="@{String.valueOf(user.followers_count)}"
+                                        android:text="@{String.valueOf(user.followers.size())}"
                                         tools:text="10"/>
 
                                 <TextView
@@ -74,19 +87,7 @@
                                         android:gravity="center"
                                         android:textStyle="bold"
                                         android:textSize="14sp"
-                                        android:text="@{String.valueOf(user.follows_count)}"
-                                        tools:text="10"/>
-
-                                <TextView
-                                        android:id="@+id/tv_repositories"
-                                        android:padding="@dimen/common_padding_6dp"
-                                        android:layout_weight="1"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:textStyle="bold"
-                                        android:textSize="14sp"
-                                        android:text="@{String.valueOf(user.media_count)}"
+                                        android:text="@{String.valueOf(user.following.size())}"
                                         tools:text="10"/>
                             </LinearLayout>
 
@@ -130,7 +131,18 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size"
-                            android:text="@string/account_edit_profile"/>
+                            android:text="@string/account_edit_profile"
+                            android:visibility="@{safeUnbox(viewmodel.ownerState) ? View.VISIBLE : View.GONE}"/>
+
+                    <Button
+                            android:id="@+id/btn_follow"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size"
+                            android:text="@string/profile_btn_follow"
+                            android:onClick="@{() -> viewmodel.onClickFollow(user)}"
+                            android:enabled="@{safeUnbox(viewmodel.followState) ? false : true}"
+                            android:visibility="@{safeUnbox(viewmodel.ownerState) ? View.GONE : View.VISIBLE}"/>
                 </LinearLayout>
             </LinearLayout>
 

@@ -6,6 +6,7 @@ import com.example.yun.yunstagram.ui.auth.AuthActivity
 import com.example.yun.yunstagram.ui.home.MainActivity
 import com.example.yun.yunstagram.ui.post.PostDetailActivity
 import com.example.yun.yunstagram.ui.post.PostEditActivity
+import com.example.yun.yunstagram.ui.profile.ProfileActivity
 import com.example.yun.yunstagram.ui.profile.ProfileEditActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -20,6 +21,10 @@ abstract class ActivityBuilder {
     @PerActivity
     @ContributesAndroidInjector(modules = [MainActivityModule::class])
     abstract fun bindMainActivity(): MainActivity
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = [ProfileActivityModule::class])
+    abstract fun bindProfileActivity(): ProfileActivity
 
     @PerActivity
     @ContributesAndroidInjector(modules = [ProfileEditActivityModule::class])

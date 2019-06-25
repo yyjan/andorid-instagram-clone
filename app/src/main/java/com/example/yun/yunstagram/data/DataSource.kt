@@ -18,6 +18,8 @@ interface DataSource {
 
     fun updateUser(user: User): Completable
 
+    fun updateUserValue(uid: String, value: Map<String, Any?>): Completable
+
     fun getUser(uid: String): Single<Value<DocumentSnapshot>>
 
     fun getCurrentUser() : FirebaseUser?

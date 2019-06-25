@@ -49,6 +49,10 @@ class DataRepository : DataSource {
         return RxFirebaseFirestore.set(usersCollection.document(user.uid!!), user)
     }
 
+    override fun updateUserValue(uid: String, value: Map<String, Any?>): Completable {
+        return RxFirebaseFirestore.update(usersCollection.document(uid), value)
+    }
+
     override fun getUser(uid: String): Single<Value<DocumentSnapshot>> {
         return RxFirebaseFirestore.data(usersCollection.document(uid))
     }

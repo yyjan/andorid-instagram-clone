@@ -27,6 +27,7 @@
     <string name="account_following">Following</string>
     <string name="account_edit_profile">Edit Profile</string>
     <string name="account_log_out">Log Out</string>
+    <string name="profile_btn_follow">Follow</string>
     <string name="profile_hint_website">Website</string>
     <string name="profile_hint_biography">Biography</string>
     <string name="profile_change_photo">Change Profile Photo</string>

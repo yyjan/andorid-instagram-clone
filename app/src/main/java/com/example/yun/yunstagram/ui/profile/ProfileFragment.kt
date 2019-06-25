@@ -29,8 +29,15 @@ class ProfileFragment : DaggerFragment() {
 
     private lateinit var viewModel: ProfileViewModel
 
+    private var uid: String? = null
+
     companion object {
-        fun newInstance() = ProfileFragment()
+        const val ARGUMENT_UID = "UID"
+        fun newInstance(uid: String? = null) = ProfileFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARGUMENT_UID, uid)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -45,6 +52,50 @@ class ProfileFragment : DaggerFragment() {
             lifecycleOwner = this@ProfileFragment
         }
 
+        val adapter = PostAdapter(viewModel)
+        binding.listPost.adapter = adapter
+        setupIntent()
+        subscribeUi(adapter, binding)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        fetchUserData()
+        fetchPostData()
+        viewModel.checkOwner(uid)
+
+        btn_edit_profile.setOnClickListener {
+            openProfileEdit()
+        }
+        btn_sign_out.setOnClickListener {
+            viewModel.logOut()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_CODE_FOR_PROFILE_EDIT -> {
+                fetchUserData()
+            }
+            REQUEST_CODE_FOR_POST_EDIT -> {
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        fetchPostData()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupIntent() {
+        uid = arguments?.getString(ARGUMENT_UID)
+    }
+
+    private fun subscribeUi(adapter: PostAdapter, binding: FragmentProfileBinding) {
         viewModel.user.observe(this, Observer {
             binding.user = it
 
@@ -64,47 +115,6 @@ class ProfileFragment : DaggerFragment() {
             openPostDetails(postId)
         })
 
-        val adapter = PostAdapter(viewModel)
-        binding.listPost.adapter = adapter
-        subscribeUi(adapter)
-
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        fetchUserData()
-        fetchPostData()
-
-        btn_edit_profile.setOnClickListener {
-            openProfileEdit()
-        }
-        btn_sign_out.setOnClickListener {
-            viewModel.logOut()
-        }
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            REQUEST_CODE_FOR_PROFILE_EDIT -> {
-                fetchUserData()
-            }
-            REQUEST_CODE_FOR_POST_EDIT -> {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        fetchPostData()
-                    }
-                }
-            }
-
-        }
-    }
-
-    private fun subscribeUi(adapter: PostAdapter) {
         viewModel.posts.observe(this, Observer { posts ->
             if (posts.isNotEmpty()) adapter.submitList(posts)
         })

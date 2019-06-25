@@ -4,14 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.yun.yunstagram.R
+import com.example.yun.yunstagram.data.DataRepository
 import com.example.yun.yunstagram.utilities.replaceFragmentInActivity
 import com.example.yun.yunstagram.ui.post.PostEditActivity
 import com.example.yun.yunstagram.ui.profile.ProfileFragment
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var repository: DataRepository
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -30,7 +35,7 @@ class MainActivity : DaggerAppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_account -> {
-                replaceFragment(ProfileFragment.newInstance(), "ProfileFragment")
+                replaceFragment(ProfileFragment.newInstance(repository.getCurrentUid()), "ProfileFragment")
                 return@OnNavigationItemSelectedListener true
             }
         }

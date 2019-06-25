@@ -7,8 +7,8 @@ data class User(
     var biography: String? = null,
     var website: String? = null,
     var media_count: Int? = 0,
-    var followers_count: Int? = 0,
-    var follows_count: Int? = 0,
+    var followers: List<String>? = null,
+    var following: List<String>? = null,
     var profile_picture_url: String? = null
 ) {
 
