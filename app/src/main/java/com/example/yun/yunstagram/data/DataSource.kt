@@ -40,6 +40,8 @@ interface DataSource {
 
     fun getMyPosts(author: String): Single<Value<QuerySnapshot>>
 
+    fun getUsers(): Single<Value<QuerySnapshot>>
+
     interface UploadCallback {
         fun onSuccess(downloadUri: String)
         fun onFailed(messages: String)

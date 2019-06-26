@@ -21,7 +21,6 @@ import io.reactivex.Single
 
 
 class DataRepository : DataSource {
-
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -89,6 +88,10 @@ class DataRepository : DataSource {
         return RxFirebaseFirestore.data(
             postsCollection.whereEqualTo("author", author)
         )
+    }
+
+    override fun getUsers(): Single<Value<QuerySnapshot>> {
+        return RxFirebaseFirestore.data(usersCollection)
     }
 
     private fun setLoggedInUser(loggedInUser: FirebaseUser?) {

@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentPostDetailBinding
+import com.example.yun.yunstagram.ui.profile.ProfileActivity
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_post_detail.*
@@ -51,6 +52,10 @@ class PostDetailFragment : DaggerFragment() {
             binding.post = it
         })
 
+        viewModel.user.observe(this, Observer {
+            binding.user = it
+        })
+
         viewModel.updateResult.observe(this, Observer { state ->
             if (state.isSuccess) {
                 fetchPostData()
@@ -64,6 +69,10 @@ class PostDetailFragment : DaggerFragment() {
             } else {
                 Toast.makeText(activity, state.errorMessages, Toast.LENGTH_SHORT).show()
             }
+        })
+
+        viewModel.openProfile.observe(this, Observer {
+            openProfileDetails(it)
         })
 
         setupIntent()
@@ -124,6 +133,13 @@ class PostDetailFragment : DaggerFragment() {
             putExtra(PostEditActivity.EXTRA_POST_ID, postId)
         }
         startActivityForResult(intent, REQUEST_CODE_FOR_PROFILE_EDIT)
+    }
+
+    private fun openProfileDetails(postId: String) {
+        val intent = Intent(activity, ProfileActivity::class.java).apply {
+            putExtra(ProfileActivity.EXTRA_UID, postId)
+        }
+        startActivity(intent)
     }
 
 }

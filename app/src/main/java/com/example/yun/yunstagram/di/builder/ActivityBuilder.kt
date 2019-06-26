@@ -8,6 +8,7 @@ import com.example.yun.yunstagram.ui.post.PostDetailActivity
 import com.example.yun.yunstagram.ui.post.PostEditActivity
 import com.example.yun.yunstagram.ui.profile.ProfileActivity
 import com.example.yun.yunstagram.ui.profile.ProfileEditActivity
+import com.example.yun.yunstagram.ui.search.SearchActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -37,5 +38,9 @@ abstract class ActivityBuilder {
     @PerActivity
     @ContributesAndroidInjector(modules = [PostDetailActivityModule::class])
     abstract fun bindPostDetailActivity(): PostDetailActivity
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = [SearchActivityModule::class])
+    abstract fun bindSearchActivity(): SearchActivity
 
 }

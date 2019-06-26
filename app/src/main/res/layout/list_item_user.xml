@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View.OnClickListener"/>
+        <variable name="clickListener" type="android.view.View.OnClickListener"/>
+        <variable
+                name="actionsListener"
+                type="com.example.yun.yunstagram.ui.search.SearchItemUserActionsListener"/>
+
+        <variable name="user" type="com.example.yun.yunstagram.data.User"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_margin_16dp"
+            android:onClick="@{() -> actionsListener.onUserClicked(user)}">
+
+        <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:imageFromUrl="@{user.profile_picture_url}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{user.username}"
+                android:layout_marginLeft="@dimen/common_margin_16dp"
+                app:layout_constraintLeft_toRightOf="@id/iv_avatar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -8,6 +8,7 @@ import com.example.yun.yunstagram.data.DataRepository
 import com.example.yun.yunstagram.utilities.replaceFragmentInActivity
 import com.example.yun.yunstagram.ui.post.PostEditActivity
 import com.example.yun.yunstagram.ui.profile.ProfileFragment
+import com.example.yun.yunstagram.ui.search.SearchFragment
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
@@ -25,6 +26,7 @@ class MainActivity : DaggerAppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search -> {
+                replaceFragment(SearchFragment.newInstance(), "SearchFragment")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_control -> {

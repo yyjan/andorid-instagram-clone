@@ -6,9 +6,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View.OnClickListener" />
+        <import type="android.view.View.OnClickListener"/>
         <variable name="viewmodel" type="com.example.yun.yunstagram.ui.post.PostViewModel"/>
         <variable name="post" type="com.example.yun.yunstagram.data.Post"/>
+        <variable name="user" type="com.example.yun.yunstagram.data.User"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,31 +20,41 @@
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_avatar"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:padding="@dimen/common_margin_8dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/layout_menu"
                 tools:layout_editor_absoluteX="0dp"
                 app:layout_constraintVertical_bias="0.0">
 
-            <ImageView
-                    android:id="@+id/iv_avatar"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+            <LinearLayout
+                    android:id="@+id/layout_user_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:visibility="gone"
-                    tools:background="@color/gray"/>
-
-            <TextView
-                    android:id="@+id/tv_nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="@{post.username}"
-                    tools:text="yun"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:onClick="@{() -> viewmodel.onClickUserInfo(user)}">
+
+                <ImageView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:imageFromUrl="@{user.profile_picture_url}"
+                        tools:background="@color/gray"/>
+
+                <TextView
+                        android:id="@+id/tv_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/common_margin_16dp"
+                        android:text="@{user.username}"
+                        tools:text="yun"/>
+            </LinearLayout>
 
             <ImageView
                     android:id="@+id/iv_more"

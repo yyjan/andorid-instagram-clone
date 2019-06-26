@@ -15,6 +15,10 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     val post: LiveData<Post>
         get() = _post
 
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User>
+        get() = _user
+
     private val _downloadUri = MutableLiveData<String>()
     val downloadUri: LiveData<String>
         get() = _downloadUri
@@ -27,6 +31,10 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     val deleteState: LiveData<State>
         get() = _deleteState
 
+    private val _openProfile = MutableLiveData<String>()
+    val openProfile: LiveData<String>
+        get() = _openProfile
+
     private var editState = false
 
     fun fetchPost(id: String?) {
@@ -35,6 +43,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             .compose(loadingSingleTransformer())
             .subscribe({
                 _post.value = it.value().toObject(Post::class.java)
+                fetchUserData()
             }) {
                 it.printStackTrace()
             }
@@ -84,6 +93,18 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
+    fun fetchUserData() {
+        val author = post.value?.author
+        if (author.isNullOrEmpty()) return
+        disposables += repository.getUser(author)
+            .compose(loadingSingleTransformer())
+            .subscribe({
+                _user.value = it.value().toObject(User::class.java)
+            }) {
+                it.printStackTrace()
+            }
+    }
+
     fun uploadImage(uri: Uri) {
         // TODO: add disposables
         _loadingState.postValue(true)
@@ -118,6 +139,10 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
         val postMap = mutableMapOf<String, Any?>()
         postMap["like_count"] = post.like_count?.plus(1)
         updatePostValue(post.id, postMap)
+    }
+
+    fun onClickUserInfo(user: User) {
+        _openProfile.value = user.uid
     }
 
     private fun makeNewPost(messages: String = ""): Post {
