@@ -71,7 +71,7 @@ class ProfileEditFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        profileViewModel.fetchUserData()
+        profileViewModel.fetchCurrentUserData()
 
         btn_save.setOnClickListener {
             val userName = et_name.text.toString().trim()

@@ -3,6 +3,7 @@ package com.example.yun.yunstagram.ui.profile
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.androidhuman.rxfirebase2.firestore.model.Empty
 import com.example.yun.yunstagram.data.*
 import com.example.yun.yunstagram.ui.BaseViewModel
 import io.reactivex.rxkotlin.plusAssign
@@ -42,26 +43,34 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
     val openPost: LiveData<String>
         get() = _openPost
 
-    fun fetchUserData() {
-        val uid = repository.getCurrentUid()
+    private val _openUsers = MutableLiveData<String>()
+    val openUsers: LiveData<String>
+        get() = _openUsers
+
+    fun fetchUserData(uid: String?) {
         if (uid.isNullOrEmpty()) return
         disposables += repository.getUser(uid)
             .compose(loadingSingleTransformer())
             .subscribe({
                 _user.value = it.value().toObject(User::class.java)
-                _followState.value = user.value?.followers?.contains(uid)
+                _followState.value = user.value?.followers?.contains(getCurrentUid())
             }) {
                 it.printStackTrace()
             }
     }
 
-    fun fetchPosts() {
-        val uid = repository.getCurrentUid()
+    fun fetchCurrentUserData() {
+        fetchUserData(getCurrentUid())
+    }
+
+    fun fetchPosts(uid: String?) {
         if (uid.isNullOrEmpty()) return
         disposables += repository.getMyPosts(uid)
             .compose(loadingSingleTransformer())
             .subscribe({ queryDocumentSnapshots ->
-                _posts.value = queryDocumentSnapshots.value().toObjects(Post::class.java)
+                if (queryDocumentSnapshots !is Empty) {
+                    _posts.value = queryDocumentSnapshots.value().toObjects(Post::class.java)
+                }
             }) {
                 it.printStackTrace()
             }
@@ -86,12 +95,14 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
             }
     }
 
-    private fun updateUserValue(uid: String, value: Map<String, Any?>) {
+    private fun updateUserValue(uid: String, value: Map<String, Any?>, reload: Boolean) {
         disposables += repository.updateUserValue(uid, value)
             .compose(loadingCompletableTransformer())
             .subscribe({
                 // reload data
-                fetchUserData()
+                if (reload) {
+                    fetchUserData(uid)
+                }
             }) {
                 _updateResult.value = State(errorMessages = it.message)
             }
@@ -124,22 +135,65 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
         _ownerState.value = repository.getCurrentUid().equals(uid)
     }
 
-    fun onClickFollow(user: User) {
-        val uid = repository.getCurrentUid()
-        uid?.let { uid ->
-            val userMap = mutableMapOf<String, Any?>()
-            val followers = arrayListOf<String?>()
-            user.followers?.let {
-                followers.addAll(it)
-            }
-            followers.add(uid)
+    fun openPost(postId: String?) {
+        _openPost.value = postId
+    }
+
+    fun getCurrentUid(): String? {
+        return repository.getCurrentUid()
+    }
+
+    fun onClickFollowers(user: User) {
+        _openUsers.value = user.uid
+    }
+
+    fun onClickFollow(profileUser: User) {
+        // check uid
+        val currentUid = repository.getCurrentUid()
+        val profileUid = profileUser.uid
+        if (currentUid.isNullOrEmpty()) return
+        if (profileUid.isNullOrEmpty()) return
+
+        // increase follower
+        updateFollower(profileUser, currentUid, profileUid)
+
+        // increase following
+        updateFollowing(currentUid, profileUid)
+    }
+
+    private fun updateFollower(profileUser: User, currentUid: String, profileUid: String) {
+        val userMap = mutableMapOf<String, Any?>()
+        val followers = arrayListOf<String?>()
+        profileUser.followers?.let { list ->
+            followers.addAll(list)
+        }
+        if (!followers.contains(currentUid)) {
+            followers.add(currentUid)
             userMap["followers"] = followers
-            updateUserValue(uid, userMap)
+            updateUserValue(profileUid, userMap, true)
         }
     }
 
-    fun openPost(postId: String?) {
-        _openPost.value = postId
+    private fun updateFollowing(currentUid: String, profileUid: String) {
+        disposables += repository.getUser(currentUid)
+            .compose(loadingSingleTransformer())
+            .subscribe({
+                val currentUser = it.value().toObject(User::class.java)
+                currentUser?.let { user ->
+                    val userMap = mutableMapOf<String, Any?>()
+                    val following = arrayListOf<String?>()
+                    user.following?.let { list ->
+                        following.addAll(list)
+                    }
+                    if (!following.contains(currentUid)) {
+                        following.add(profileUid)
+                        userMap["following"] = following
+                        updateUserValue(currentUid, userMap, false)
+                    }
+                }
+            }) {
+                it.printStackTrace()
+            }
     }
 
     fun makeUser(username: String, website: String, bio: String): User {

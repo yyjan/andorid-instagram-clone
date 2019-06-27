@@ -23,8 +23,20 @@ class SearchFragment : DaggerFragment() {
 
     private lateinit var viewModel: SearchViewModel
 
+    private var uid: String? = null
+
+    private var searchType: String? = null
+
     companion object {
-        fun newInstance() = SearchFragment()
+        const val ARGUMENT_UID = "UID"
+        const val ARGUMENT_SEARCH_TYPE = "SEARCH_TYPE"
+
+        fun newInstance(uid: String? = null, type: String? = null) = SearchFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARGUMENT_UID, uid)
+                putString(ARGUMENT_SEARCH_TYPE, type)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -38,6 +50,7 @@ class SearchFragment : DaggerFragment() {
             lifecycleOwner = this@SearchFragment
         }
 
+        setupIntent()
         val adapter = UserAdapter(viewModel)
         binding.listSearch.adapter = adapter
         subscribeUi(adapter, binding)
@@ -47,12 +60,28 @@ class SearchFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchUsers()
+        when (searchType) {
+            SearchListType.USERS_FOLLOWS.name -> {
+                viewModel.fetchFollowers(uid)
+            }
+            else -> {
+                viewModel.fetchUsers()
+            }
+        }
+    }
+
+    private fun setupIntent() {
+        uid = arguments?.getString(ARGUMENT_UID)
+        searchType = arguments?.getString(ARGUMENT_SEARCH_TYPE)
     }
 
     private fun subscribeUi(adapter: UserAdapter, binding: FragmentSearchBinding) {
         viewModel.users.observe(this, Observer { users ->
             if (users.isNotEmpty()) adapter.submitList(users)
+        })
+
+        viewModel.followers.observe(this, Observer { followers ->
+            if (followers.isNotEmpty()) adapter.submitList(followers)
         })
 
         viewModel.openProfile.observe(this, Observer {

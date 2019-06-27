@@ -16,6 +16,8 @@ import com.example.yun.yunstagram.databinding.FragmentProfileBinding
 import com.example.yun.yunstagram.ui.adapters.PostAdapter
 import com.example.yun.yunstagram.ui.auth.AuthActivity
 import com.example.yun.yunstagram.ui.post.PostDetailActivity
+import com.example.yun.yunstagram.ui.search.SearchActivity
+import com.example.yun.yunstagram.ui.search.SearchListType
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
@@ -115,17 +117,21 @@ class ProfileFragment : DaggerFragment() {
             openPostDetails(postId)
         })
 
+        viewModel.openUsers.observe(this, Observer { uid ->
+            openUsers(uid, SearchListType.USERS_FOLLOWS.name)
+        })
+
         viewModel.posts.observe(this, Observer { posts ->
             if (posts.isNotEmpty()) adapter.submitList(posts)
         })
     }
 
     private fun fetchUserData() {
-        viewModel.fetchUserData()
+        viewModel.fetchUserData(uid)
     }
 
     private fun fetchPostData() {
-        viewModel.fetchPosts()
+        viewModel.fetchPosts(uid)
     }
 
     private fun openProfileEdit() {
@@ -137,6 +143,14 @@ class ProfileFragment : DaggerFragment() {
             putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
         }
         startActivityForResult(intent, REQUEST_CODE_FOR_POST_EDIT)
+    }
+
+    private fun openUsers(uid: String, searchType: String) {
+        val intent = Intent(activity, SearchActivity::class.java).apply {
+            putExtra(SearchActivity.EXTRA_UID, uid)
+            putExtra(SearchActivity.EXTRA_SEARCH_TYPE, searchType)
+        }
+        startActivity(intent)
     }
 
 }

@@ -11,9 +11,17 @@ class SearchActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_profile)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container,
-                    SearchFragment.newInstance())
+                .replace(
+                    R.id.container,
+                    SearchFragment.newInstance(intent.getStringExtra(EXTRA_UID), intent.getStringExtra(EXTRA_SEARCH_TYPE))
+                )
                 .commitNow()
         }
     }
+
+    companion object {
+        const val EXTRA_UID = "UID"
+        const val EXTRA_SEARCH_TYPE = "SEARCH_TYPE"
+    }
+
 }
