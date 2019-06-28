@@ -3,15 +3,19 @@ package com.example.yun.yunstagram.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yun.yunstagram.data.Post
+import com.example.yun.yunstagram.databinding.ListItemHomePostBinding
 import com.example.yun.yunstagram.databinding.ListItemPostBinding
+import com.example.yun.yunstagram.ui.home.HomeViewModel
 import com.example.yun.yunstagram.ui.post.PostItemUserActionsListener
 import com.example.yun.yunstagram.ui.profile.ProfileViewModel
 
-class PostAdapter(private val viewModel: ProfileViewModel) : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()) {
+class PostAdapter(private val viewModel: Any, private val viewType: PostViewType) :
+    ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = getItem(position)
@@ -22,8 +26,20 @@ class PostAdapter(private val viewModel: ProfileViewModel) : ListAdapter<Post, P
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ListItemPostBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false), viewModel)
+
+        return when (viewType) {
+            PostViewType.PROFILE.type -> ProfileViewHolder(
+                ListItemPostBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                ), viewModel
+            )
+            else -> HomeViewHolder(
+                ListItemHomePostBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                ), viewModel
+            )
+
+        }
     }
 
     private fun createOnClickListener(postId: String?): View.OnClickListener {
@@ -32,15 +48,21 @@ class PostAdapter(private val viewModel: ProfileViewModel) : ListAdapter<Post, P
         }
     }
 
-    class ViewHolder(
-        private val binding: ListItemPostBinding,
-        private val viewModel: ProfileViewModel
+    abstract class ViewHolder(
+        private val binding: ViewDataBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(listener: View.OnClickListener, item: Post) {
+        abstract fun bind(listener: View.OnClickListener, item: Post)
+    }
+
+    class ProfileViewHolder(
+        private val binding: ListItemPostBinding,
+        private val viewModel: Any
+    ) : ViewHolder(binding) {
+        override fun bind(listener: View.OnClickListener, item: Post) {
             val userActionsListener = object : PostItemUserActionsListener {
                 override fun onPostClicked(post: Post) {
-                    viewModel.openPost(post.id)
+                    (viewModel as ProfileViewModel).openPost(post.id)
                 }
             }
 
@@ -52,6 +74,34 @@ class PostAdapter(private val viewModel: ProfileViewModel) : ListAdapter<Post, P
             }
         }
     }
+
+    class HomeViewHolder(
+        private val binding: ListItemHomePostBinding,
+        private val viewModel: Any
+    ) : ViewHolder(binding) {
+        override fun bind(listener: View.OnClickListener, item: Post) {
+            val userActionsListener = object : PostItemUserActionsListener {
+                override fun onPostClicked(post: Post) {
+                    (viewModel as HomeViewModel).openPost(post.id)
+                }
+            }
+
+            binding.apply {
+                actionsListener = userActionsListener
+                post = item
+                executePendingBindings()
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return viewType.type
+    }
+}
+
+enum class PostViewType(val type: Int) {
+    HOME(0),
+    PROFILE(1)
 }
 
 private class PostDiffCallback : DiffUtil.ItemCallback<Post>() {

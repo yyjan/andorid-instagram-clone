@@ -9,7 +9,8 @@ data class Post(
     var like_count: Int? = 0,
     var username: String? = null,
     var author: String? = null,
-    var picture_url: String? = null
+    var picture_url: String? = null,
+    var user : User? = User()
 )
 
 // comments

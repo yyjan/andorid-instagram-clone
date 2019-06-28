@@ -14,6 +14,7 @@ import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileBinding
 import com.example.yun.yunstagram.ui.adapters.PostAdapter
+import com.example.yun.yunstagram.ui.adapters.PostViewType
 import com.example.yun.yunstagram.ui.auth.AuthActivity
 import com.example.yun.yunstagram.ui.post.PostDetailActivity
 import com.example.yun.yunstagram.ui.search.SearchActivity
@@ -54,7 +55,7 @@ class ProfileFragment : DaggerFragment() {
             lifecycleOwner = this@ProfileFragment
         }
 
-        val adapter = PostAdapter(viewModel)
+        val adapter = PostAdapter(viewModel, PostViewType.PROFILE)
         binding.listPost.adapter = adapter
         setupIntent()
         subscribeUi(adapter, binding)

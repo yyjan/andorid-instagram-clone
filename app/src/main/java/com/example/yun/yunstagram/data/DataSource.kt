@@ -36,6 +36,8 @@ interface DataSource {
 
     fun deletePost(id: String): Completable
 
+    fun getHomePosts(): Single<Value<QuerySnapshot>>
+
     fun getPost(id: String): Single<Value<DocumentSnapshot>>
 
     fun getMyPosts(author: String): Single<Value<QuerySnapshot>>

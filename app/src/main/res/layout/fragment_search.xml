@@ -4,7 +4,6 @@
         <import type="android.view.View"/>
         <import type="android.view.View.OnClickListener"/>
         <variable name="viewmodel" type="com.example.yun.yunstagram.ui.search.SearchViewModel"/>
-        <variable name="user" type="com.example.yun.yunstagram.data.User"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

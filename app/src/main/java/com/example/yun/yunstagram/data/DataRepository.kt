@@ -80,6 +80,10 @@ class DataRepository : DataSource {
         return RxFirebaseFirestore.delete(postsCollection.document(id))
     }
 
+    override fun getHomePosts(): Single<Value<QuerySnapshot>> {
+        return RxFirebaseFirestore.data(postsCollection)
+    }
+
     override fun getPost(id: String): Single<Value<DocumentSnapshot>> {
         return RxFirebaseFirestore.data(postsCollection.document(id))
     }
