@@ -89,6 +89,7 @@
                                         android:textStyle="bold"
                                         android:textSize="14sp"
                                         android:text="@{String.valueOf(user.following.size())}"
+                                        android:onClick="@{() -> viewmodel.onClickFollowing(user)}"
                                         tools:text="10"/>
                             </LinearLayout>
 

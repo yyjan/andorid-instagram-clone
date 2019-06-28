@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.androidhuman.rxfirebase2.firestore.model.Empty
 import com.example.yun.yunstagram.data.*
 import com.example.yun.yunstagram.ui.BaseViewModel
+import com.example.yun.yunstagram.ui.search.SearchListType
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 
@@ -43,8 +44,8 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
     val openPost: LiveData<String>
         get() = _openPost
 
-    private val _openUsers = MutableLiveData<String>()
-    val openUsers: LiveData<String>
+    private val _openUsers = MutableLiveData<Any>()
+    val openUsers: LiveData<Any>
         get() = _openUsers
 
     fun fetchUserData(uid: String?) {
@@ -144,7 +145,11 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
     }
 
     fun onClickFollowers(user: User) {
-        _openUsers.value = user.uid
+        _openUsers.value = mutableMapOf(Pair("searchType", SearchListType.USERS_FOLLOWS.name), Pair("uid", user.uid))
+    }
+
+    fun onClickFollowing(user: User) {
+        _openUsers.value =  mutableMapOf(Pair("searchType", SearchListType.USERS_FOLLOWINGS.name), Pair("uid", user.uid))
     }
 
     fun onClickFollow(profileUser: User) {

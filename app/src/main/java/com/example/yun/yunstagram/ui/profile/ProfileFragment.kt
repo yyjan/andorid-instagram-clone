@@ -117,8 +117,9 @@ class ProfileFragment : DaggerFragment() {
             openPostDetails(postId)
         })
 
-        viewModel.openUsers.observe(this, Observer { uid ->
-            openUsers(uid, SearchListType.USERS_FOLLOWS.name)
+        viewModel.openUsers.observe(this, Observer { map ->
+            val maps = map as Map<String, String>
+            openUsers(maps["uid"].toString(), maps["searchType"].toString())
         })
 
         viewModel.posts.observe(this, Observer { posts ->

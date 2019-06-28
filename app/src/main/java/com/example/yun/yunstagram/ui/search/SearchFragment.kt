@@ -64,6 +64,9 @@ class SearchFragment : DaggerFragment() {
             SearchListType.USERS_FOLLOWS.name -> {
                 viewModel.fetchFollowers(uid)
             }
+            SearchListType.USERS_FOLLOWINGS.name -> {
+                viewModel.fetchFollowings(uid)
+            }
             else -> {
                 viewModel.fetchUsers()
             }
@@ -82,6 +85,10 @@ class SearchFragment : DaggerFragment() {
 
         viewModel.followers.observe(this, Observer { followers ->
             if (followers.isNotEmpty()) adapter.submitList(followers)
+        })
+
+        viewModel.followings.observe(this, Observer { followings ->
+            if (followings.isNotEmpty()) adapter.submitList(followings)
         })
 
         viewModel.openProfile.observe(this, Observer {

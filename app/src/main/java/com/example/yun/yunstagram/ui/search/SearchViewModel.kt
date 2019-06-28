@@ -18,11 +18,16 @@ class SearchViewModel @Inject constructor(private val repository: DataRepository
     val followers: LiveData<List<User>>
         get() = _followers
 
+    private val _followings = MutableLiveData<List<User>>()
+    val followings: LiveData<List<User>>
+        get() = _followings
+
     private val _openProfile = MutableLiveData<String>()
     val openProfile: LiveData<String>
         get() = _openProfile
 
     private val followerList: MutableList<User> = arrayListOf()
+    private val followingList: MutableList<User> = arrayListOf()
 
     fun fetchUsers() {
         disposables += repository.getUsers()
@@ -42,14 +47,40 @@ class SearchViewModel @Inject constructor(private val repository: DataRepository
                 val user = it.value().toObject(User::class.java)
                 val followers = user?.followers
 
-                followers?.forEach { _ ->
-                    disposables += repository.getUser(uid)
+                followers?.forEach { id ->
+                    disposables += repository.getUser(id)
                         .compose(loadingSingleTransformer())
                         .subscribe({ data ->
-                            val user = data.value().toObject(User::class.java)
-                            user?.let {
-                                followerList.add(user)
+                            val follower = data.value().toObject(User::class.java)
+                            follower?.let {
+                                followerList.add(follower)
                                 _followers.value = followerList
+                            }
+                        }) {
+                            it.printStackTrace()
+                        }
+                }
+            }) {
+                it.printStackTrace()
+            }
+    }
+
+    fun fetchFollowings(uid: String?) {
+        if (uid.isNullOrEmpty()) return
+        disposables += repository.getUser(uid)
+            .compose(loadingSingleTransformer())
+            .subscribe({
+                val user = it.value().toObject(User::class.java)
+                val followings = user?.following
+
+                followings?.forEach { id ->
+                    disposables += repository.getUser(id)
+                        .compose(loadingSingleTransformer())
+                        .subscribe({ data ->
+                            val following = data.value().toObject(User::class.java)
+                            following?.let {
+                                followingList.add(following)
+                                _followings.value = followingList
                             }
                         }) {
                             it.printStackTrace()
