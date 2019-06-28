@@ -14,4 +14,6 @@ object Constants {
 
     const val DB_ROOT_POSTS = "posts"
 
+    const val DB_ROOT_FAVORITES = "favorites"
+
 }

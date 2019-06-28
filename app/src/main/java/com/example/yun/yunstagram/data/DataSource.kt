@@ -42,6 +42,8 @@ interface DataSource {
 
     fun getMyPosts(author: String): Single<Value<QuerySnapshot>>
 
+    fun getMyFavorites(author: String): Single<Value<DocumentSnapshot>>
+
     fun getUsers(): Single<Value<QuerySnapshot>>
 
     interface UploadCallback {

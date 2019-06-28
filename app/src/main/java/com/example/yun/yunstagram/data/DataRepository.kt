@@ -27,6 +27,7 @@ class DataRepository : DataSource {
 
     private val usersCollection = db.collection(Constants.DB_ROOT_USERS)
     private val postsCollection = db.collection(Constants.DB_ROOT_POSTS)
+    private val favoritesCollection = db.collection(Constants.DB_ROOT_FAVORITES)
 
     private var loggedInUser: FirebaseUser? = null
 
@@ -92,6 +93,10 @@ class DataRepository : DataSource {
         return RxFirebaseFirestore.data(
             postsCollection.whereEqualTo("author", author)
         )
+    }
+
+    override fun getMyFavorites(author: String): Single<Value<DocumentSnapshot>> {
+        return RxFirebaseFirestore.data(favoritesCollection.document(author))
     }
 
     override fun getUsers(): Single<Value<QuerySnapshot>> {

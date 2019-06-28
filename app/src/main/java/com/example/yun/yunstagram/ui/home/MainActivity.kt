@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.data.DataRepository
+import com.example.yun.yunstagram.ui.favorite.FavoriteFragment
 import com.example.yun.yunstagram.utilities.replaceFragmentInActivity
 import com.example.yun.yunstagram.ui.post.PostEditActivity
 import com.example.yun.yunstagram.ui.profile.ProfileFragment
@@ -34,6 +35,7 @@ class MainActivity : DaggerAppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_favorite -> {
+                replaceFragment(FavoriteFragment.newInstance(), "FavoriteFragment")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_account -> {
