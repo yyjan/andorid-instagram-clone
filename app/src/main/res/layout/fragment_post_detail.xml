@@ -43,8 +43,7 @@
                         android:layout_height="40dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:imageFromUrl="@{user.profile_picture_url}"
-                        tools:background="@color/gray"/>
+                        app:circleImageFromUrl="@{user.profile_picture_url}"/>
 
                 <TextView
                         android:id="@+id/tv_nickname"
@@ -65,12 +64,12 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:src="@drawable/ic_more_24dp"/>
 
-            <View style="@style/ViewDivider"
-                  app:layout_constraintBottom_toBottomOf="parent"
-                  android:layout_width="match_parent"
-                  android:layout_height="0.5dp"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View style="@style/ViewDivider"
+              app:layout_constraintTop_toBottomOf="@id/layout_avatar"
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"/>
 
         <ImageView
                 android:id="@+id/iv_image"

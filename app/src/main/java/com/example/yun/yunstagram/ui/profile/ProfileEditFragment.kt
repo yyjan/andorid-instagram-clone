@@ -17,6 +17,7 @@ import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileEditBinding
 import com.example.yun.yunstagram.utilities.Constants
+import com.example.yun.yunstagram.utilities.loadCircleImage
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
 import javax.inject.Inject
@@ -47,7 +48,6 @@ class ProfileEditFragment : DaggerFragment() {
 
         profileViewModel.user.observe(this, Observer {
             binding.user = it
-            showProfileImage(it.profile_picture_url)
         })
 
         profileViewModel.updateResult.observe(this, Observer { state ->
@@ -100,8 +100,7 @@ class ProfileEditFragment : DaggerFragment() {
     }
 
     private fun showProfileImage(url: String?) {
-        GlideApp.with(this).load(url)
-            .into(iv_avatar)
+        iv_avatar.loadCircleImage(url)
     }
 
     private fun getPhotoImages() {

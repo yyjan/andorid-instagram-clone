@@ -8,9 +8,11 @@
     <dimen name="common_margin_16dp">16dp</dimen>
     <dimen name="common_margin_8dp">8dp</dimen>
     <dimen name="common_padding_6dp">6dp</dimen>
+    <dimen name="common_padding_3dp">3dp</dimen>
 
     <dimen name="text_title_size">24sp</dimen>
     <dimen name="text_size">12sp</dimen>
+    <dimen name="text_size_12sp">12sp</dimen>
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_16sp">14sp</dimen>
 

@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.example.yun.yunstagram.GlideApp
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentProfileBinding
 import com.example.yun.yunstagram.ui.adapters.PostAdapter
@@ -18,7 +18,6 @@ import com.example.yun.yunstagram.ui.adapters.PostViewType
 import com.example.yun.yunstagram.ui.auth.AuthActivity
 import com.example.yun.yunstagram.ui.post.PostDetailActivity
 import com.example.yun.yunstagram.ui.search.SearchActivity
-import com.example.yun.yunstagram.ui.search.SearchListType
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
@@ -75,6 +74,9 @@ class ProfileFragment : DaggerFragment() {
         btn_sign_out.setOnClickListener {
             viewModel.logOut()
         }
+
+        list_post.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
+        list_post.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -101,10 +103,6 @@ class ProfileFragment : DaggerFragment() {
     private fun subscribeUi(adapter: PostAdapter, binding: FragmentProfileBinding) {
         viewModel.user.observe(this, Observer {
             binding.user = it
-
-            GlideApp.with(this)
-                .load(it.profile_picture_url)
-                .into(iv_avatar)
         })
 
         viewModel.logOutState.observe(this, Observer { isLogOut ->

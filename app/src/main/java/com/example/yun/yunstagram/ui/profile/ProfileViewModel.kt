@@ -120,14 +120,17 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
 
     fun updateImage(uri: Uri) {
         // TODO : add disposables
+        _loadingState.value = true
         repository.uploadFile(uri, object : DataSource.UploadCallback {
             override fun onFailed(messages: String) {
                 _uploadImageResult.value = State(errorMessages = messages)
+                _loadingState.value = false
             }
 
             override fun onSuccess(downloadUri: String) {
-                user.value?.profile_picture_url = downloadUri
-                updateUserProfileImage(convertUser())
+                _user.value?.profile_picture_url = downloadUri
+                _uploadImageResult.value = State(isSuccess = true)
+                _loadingState.value = false
             }
         })
     }
@@ -149,7 +152,7 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
     }
 
     fun onClickFollowing(user: User) {
-        _openUsers.value =  mutableMapOf(Pair("searchType", SearchListType.USERS_FOLLOWINGS.name), Pair("uid", user.uid))
+        _openUsers.value = mutableMapOf(Pair("searchType", SearchListType.USERS_FOLLOWINGS.name), Pair("uid", user.uid))
     }
 
     fun onClickFollow(profileUser: User) {
