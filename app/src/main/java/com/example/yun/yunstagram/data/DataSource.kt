@@ -22,6 +22,8 @@ interface DataSource {
 
     fun getUser(uid: String): Single<Value<DocumentSnapshot>>
 
+    fun getSearchUser(name: String): Single<Value<QuerySnapshot>>
+
     fun getCurrentUser() : FirebaseUser?
 
     fun getCurrentUid(): String?

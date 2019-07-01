@@ -10,6 +10,7 @@ import com.example.yun.yunstagram.utilities.replaceFragmentInActivity
 import com.example.yun.yunstagram.ui.post.PostEditActivity
 import com.example.yun.yunstagram.ui.profile.ProfileFragment
 import com.example.yun.yunstagram.ui.search.SearchFragment
+import com.example.yun.yunstagram.ui.search.SearchListType
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.example.yun.yunstagram.utilities.setupActionBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -28,7 +29,7 @@ class MainActivity : DaggerAppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search -> {
-                replaceFragment(SearchFragment.newInstance(), "SearchFragment")
+                replaceFragment(SearchFragment.newInstance(type = SearchListType.USERS.name), "SearchFragment")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_control -> {
@@ -56,7 +57,7 @@ class MainActivity : DaggerAppCompatActivity() {
         navView.itemIconTintList = null
         replaceFragment(HomeFragment.newInstance(), "HomeFragment")
 
-        setupActionBar(R.id.toolbar){
+        setupActionBar(R.id.toolbar) {
 
         }
     }

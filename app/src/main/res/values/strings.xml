@@ -45,5 +45,6 @@
     <!-- Search -->
     <string name="title_search_followers">@string/account_followers</string>
     <string name="title_search_following">@string/account_following</string>
+    <string name="hint_search_user">@string/title_search</string>
 
 </resources>

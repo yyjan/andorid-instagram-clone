@@ -57,6 +57,12 @@ class DataRepository : DataSource {
         return RxFirebaseFirestore.data(usersCollection.document(uid))
     }
 
+    override fun getSearchUser(name: String): Single<Value<QuerySnapshot>>  {
+        return RxFirebaseFirestore.data(
+            usersCollection.whereEqualTo("username", name)
+        )
+    }
+
     override fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
     }

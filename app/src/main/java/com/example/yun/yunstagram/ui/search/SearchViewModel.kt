@@ -2,6 +2,7 @@ package com.example.yun.yunstagram.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.androidhuman.rxfirebase2.firestore.model.Empty
 import com.example.yun.yunstagram.data.DataRepository
 import com.example.yun.yunstagram.data.User
 import com.example.yun.yunstagram.ui.BaseViewModel
@@ -34,6 +35,18 @@ class SearchViewModel @Inject constructor(private val repository: DataRepository
             .compose(loadingSingleTransformer())
             .subscribe({ queryDocumentSnapshots ->
                 _users.value = queryDocumentSnapshots.value().toObjects(User::class.java)
+            }) {
+                it.printStackTrace()
+            }
+    }
+
+    fun searchUser(userName: String) {
+        disposables += repository.getSearchUser(userName)
+            .compose(loadingSingleTransformer())
+            .subscribe({ queryDocumentSnapshots ->
+                if (queryDocumentSnapshots !is Empty) {
+                    _users.value = queryDocumentSnapshots.value().toObjects(User::class.java)
+                }
             }) {
                 it.printStackTrace()
             }

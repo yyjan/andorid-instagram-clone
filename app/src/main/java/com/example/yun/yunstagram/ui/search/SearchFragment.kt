@@ -2,9 +2,8 @@ package com.example.yun.yunstagram.ui.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +22,8 @@ class SearchFragment : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: SearchViewModel
+
+    private var searchView: SearchView? = null
 
     private var uid: String? = null
 
@@ -52,6 +53,7 @@ class SearchFragment : DaggerFragment() {
         }
 
         setupIntent()
+        setHasOptionsMenu(searchType.equals(SearchListType.USERS.name))
         changeTitle()
 
         val adapter = UserAdapter(viewModel)
@@ -59,6 +61,33 @@ class SearchFragment : DaggerFragment() {
         subscribeUi(adapter, binding)
 
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_search, menu)
+
+        val searchItem = menu?.findItem(R.id.action_search)
+        searchView = searchItem?.actionView as SearchView
+        searchView?.let {
+            it.maxWidth = Integer.MAX_VALUE
+            it.queryHint = getString(R.string.hint_search_user)
+            it.setIconifiedByDefault(false)
+            it.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    viewModel.searchUser(query)
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    if (newText.isBlank()) {
+                        viewModel.fetchUsers()
+                    }
+                    return true
+                }
+            })
+        }
+
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
