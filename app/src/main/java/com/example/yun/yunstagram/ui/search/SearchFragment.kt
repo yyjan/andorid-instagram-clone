@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
+import com.example.yun.yunstagram.data.User
 import com.example.yun.yunstagram.databinding.FragmentSearchBinding
 import com.example.yun.yunstagram.ui.adapters.UserAdapter
 import com.example.yun.yunstagram.ui.profile.ProfileActivity
@@ -51,6 +52,8 @@ class SearchFragment : DaggerFragment() {
         }
 
         setupIntent()
+        changeTitle()
+
         val adapter = UserAdapter(viewModel)
         binding.listSearch.adapter = adapter
         subscribeUi(adapter, binding)
@@ -96,9 +99,24 @@ class SearchFragment : DaggerFragment() {
         })
     }
 
-    private fun openProfileDetails(postId: String) {
+    private fun changeTitle() {
+        activity?.title = when (searchType) {
+            SearchListType.USERS_FOLLOWS.name -> {
+                getString(R.string.title_search_followers)
+            }
+            SearchListType.USERS_FOLLOWINGS.name -> {
+                getString(R.string.title_search_following)
+            }
+            else -> {
+                getString(R.string.title_search)
+            }
+        }
+    }
+
+    private fun openProfileDetails(user: User) {
         val intent = Intent(activity, ProfileActivity::class.java).apply {
-            putExtra(ProfileActivity.EXTRA_UID, postId)
+            putExtra(ProfileActivity.EXTRA_UID, user.uid)
+            putExtra(ProfileActivity.EXTRA_USER_NAME, user.username)
         }
         startActivity(intent)
     }

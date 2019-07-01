@@ -3,9 +3,8 @@ package com.example.yun.yunstagram.ui.profile
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +19,7 @@ import com.example.yun.yunstagram.ui.post.PostDetailActivity
 import com.example.yun.yunstagram.ui.search.SearchActivity
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
+import com.example.yun.yunstagram.utilities.setupActionBar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
@@ -71,12 +71,24 @@ class ProfileFragment : DaggerFragment() {
         btn_edit_profile.setOnClickListener {
             openProfileEdit()
         }
-        btn_sign_out.setOnClickListener {
-            viewModel.logOut()
-        }
 
         list_post.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
         list_post.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_more -> {
+                showMenuDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_profile, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -103,6 +115,13 @@ class ProfileFragment : DaggerFragment() {
     private fun subscribeUi(adapter: PostAdapter, binding: FragmentProfileBinding) {
         viewModel.user.observe(this, Observer {
             binding.user = it
+            changeTitle(it.username)
+        })
+
+        viewModel.ownerState.observe(this, Observer { isOwner ->
+            if (isOwner) {
+                setHasOptionsMenu(true)
+            }
         })
 
         viewModel.logOutState.observe(this, Observer { isLogOut ->
@@ -132,6 +151,26 @@ class ProfileFragment : DaggerFragment() {
 
     private fun fetchPostData() {
         viewModel.fetchPosts(uid)
+    }
+
+    private fun showMenuDialog() {
+        context?.let {
+            val builder = AlertDialog.Builder(it)
+            val menus = arrayOf(getString(R.string.account_log_out))
+            builder.setItems(menus) { _, which ->
+                when (which) {
+                    0 -> {
+                        viewModel.logOut()
+                    }
+                }
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
+    }
+
+    private fun changeTitle(userName: String?) {
+        activity?.title = userName ?: getString(R.string.title_profile)
     }
 
     private fun openProfileEdit() {

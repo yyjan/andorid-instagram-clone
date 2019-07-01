@@ -22,8 +22,8 @@ class SearchViewModel @Inject constructor(private val repository: DataRepository
     val followings: LiveData<List<User>>
         get() = _followings
 
-    private val _openProfile = MutableLiveData<String>()
-    val openProfile: LiveData<String>
+    private val _openProfile = MutableLiveData<User>()
+    val openProfile: LiveData<User>
         get() = _openProfile
 
     private val followerList: MutableList<User> = arrayListOf()
@@ -92,7 +92,7 @@ class SearchViewModel @Inject constructor(private val repository: DataRepository
     }
 
     fun onClickUserInfo(user: User) {
-        _openProfile.value = user.uid
+        _openProfile.value = user
     }
 
 }

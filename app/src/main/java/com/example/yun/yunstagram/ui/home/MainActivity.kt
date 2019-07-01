@@ -11,6 +11,7 @@ import com.example.yun.yunstagram.ui.post.PostEditActivity
 import com.example.yun.yunstagram.ui.profile.ProfileFragment
 import com.example.yun.yunstagram.ui.search.SearchFragment
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
+import com.example.yun.yunstagram.utilities.setupActionBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -54,6 +55,10 @@ class MainActivity : DaggerAppCompatActivity() {
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         navView.itemIconTintList = null
         replaceFragment(HomeFragment.newInstance(), "HomeFragment")
+
+        setupActionBar(R.id.toolbar){
+
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

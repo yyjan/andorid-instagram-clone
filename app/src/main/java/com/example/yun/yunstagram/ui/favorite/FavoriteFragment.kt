@@ -34,8 +34,13 @@ class FavoriteFragment : DaggerFragment() {
             lifecycleOwner = this@FavoriteFragment
         }
 
+        changeTitle()
 
         return binding.root
+    }
+
+    private fun changeTitle() {
+        activity?.title = getString(R.string.title_favorite)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

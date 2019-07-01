@@ -44,6 +44,7 @@ class HomeFragment : DaggerFragment() {
         val adapter = PostAdapter(viewModel, PostViewType.HOME)
         binding.listPost.adapter = adapter
         subscribeUi(adapter, binding)
+        changeTitle()
         return binding.root
     }
 
@@ -66,6 +67,10 @@ class HomeFragment : DaggerFragment() {
         })
     }
 
+    private fun changeTitle() {
+        activity?.title = getString(R.string.app_name)
+    }
+
     private fun openPostDetails(postId: String) {
         val intent = Intent(activity, PostDetailActivity::class.java).apply {
             putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
@@ -79,5 +84,4 @@ class HomeFragment : DaggerFragment() {
         }
         startActivity(intent)
     }
-
 }

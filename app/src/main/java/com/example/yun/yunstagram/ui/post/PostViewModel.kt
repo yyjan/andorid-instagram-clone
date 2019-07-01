@@ -31,8 +31,8 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     val deleteState: LiveData<State>
         get() = _deleteState
 
-    private val _openProfile = MutableLiveData<String>()
-    val openProfile: LiveData<String>
+    private val _openProfile = MutableLiveData<User>()
+    val openProfile: LiveData<User>
         get() = _openProfile
 
     private var editState = false
@@ -142,7 +142,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     }
 
     fun onClickUserInfo(user: User) {
-        _openProfile.value = user.uid
+        _openProfile.value = user
     }
 
     private fun makeNewPost(messages: String = ""): Post {

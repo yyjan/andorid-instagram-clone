@@ -33,7 +33,7 @@ class PostEditActivity : DaggerAppCompatActivity() {
         }
     }
 
-    fun setupIntent() {
+    private fun setupIntent() {
         intent?.let {
             postId = intent.getStringExtra(EXTRA_POST_ID)
         }
