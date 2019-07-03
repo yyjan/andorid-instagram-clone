@@ -16,6 +16,7 @@ import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.data.User
 import com.example.yun.yunstagram.databinding.FragmentPostDetailBinding
 import com.example.yun.yunstagram.ui.profile.ProfileActivity
+import com.example.yun.yunstagram.ui.search.SearchActivity
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_PROFILE_EDIT
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_post_detail.*
@@ -60,6 +61,7 @@ class PostDetailFragment : DaggerFragment() {
         viewModel.updateResult.observe(this, Observer { state ->
             if (state.isSuccess) {
                 fetchPostData()
+                activity?.setResult(Activity.RESULT_OK)
             }
         })
 
@@ -74,6 +76,11 @@ class PostDetailFragment : DaggerFragment() {
 
         viewModel.openProfile.observe(this, Observer {
             openProfileDetails(it)
+        })
+
+        viewModel.openUsers.observe(this, Observer { map ->
+            val maps = map as Map<String, String>
+            openLikeUsers(maps["postId"].toString(), maps["searchType"].toString())
         })
 
         setupIntent()
@@ -144,4 +151,11 @@ class PostDetailFragment : DaggerFragment() {
         startActivity(intent)
     }
 
+    private fun openLikeUsers(postId: String, searchType: String) {
+        val intent = Intent(activity, SearchActivity::class.java).apply {
+            putExtra(SearchActivity.EXTRA_POST_ID, postId)
+            putExtra(SearchActivity.EXTRA_SEARCH_TYPE, searchType)
+        }
+        startActivity(intent)
+    }
 }

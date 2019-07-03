@@ -1,5 +1,6 @@
 package com.example.yun.yunstagram.ui.adapters
 
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -23,4 +24,9 @@ fun bindCircleImageFromUrl(view: ImageView, imageUrl: String?) {
     if (!imageUrl.isNullOrEmpty()) {
         view.loadCircleImage(imageUrl)
     }
+}
+
+@BindingAdapter("likesVisibility")
+fun bindLikesVisibility(view: View, likeCount: Int) {
+    view.visibility = if (likeCount > 0) View.VISIBLE else View.GONE
 }

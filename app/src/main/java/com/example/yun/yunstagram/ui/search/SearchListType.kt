@@ -5,5 +5,7 @@ enum class SearchListType {
 
     USERS_FOLLOWS,
 
-    USERS_FOLLOWINGS
+    USERS_FOLLOWINGS,
+
+    USERS_LIKES
 }

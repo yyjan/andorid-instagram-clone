@@ -1,5 +1,6 @@
 package com.example.yun.yunstagram.ui.home
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.example.yun.yunstagram.ui.adapters.PostViewType
 import com.example.yun.yunstagram.ui.post.PostDetailActivity
 import com.example.yun.yunstagram.ui.profile.ProfileActivity
 import com.example.yun.yunstagram.utilities.Constants
+import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_DETAIL
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -50,7 +52,22 @@ class HomeFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchPosts()
+        loadPostList()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_CODE_FOR_POST_DETAIL -> {
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        // TODO: refresh home list
+                        // loadPostList()
+                    }
+                }
+            }
+        }
     }
 
     private fun subscribeUi(adapter: PostAdapter, binding: FragmentHomeBinding) {
@@ -71,11 +88,15 @@ class HomeFragment : DaggerFragment() {
         activity?.title = getString(R.string.app_name)
     }
 
+    private fun loadPostList() {
+        viewModel.fetchPosts()
+    }
+
     private fun openPostDetails(postId: String) {
         val intent = Intent(activity, PostDetailActivity::class.java).apply {
             putExtra(PostDetailActivity.EXTRA_POST_ID, postId)
         }
-        startActivityForResult(intent, Constants.REQUEST_CODE_FOR_POST_EDIT)
+        startActivityForResult(intent, REQUEST_CODE_FOR_POST_DETAIL)
     }
 
     private fun openProfileDetails(postId: String) {

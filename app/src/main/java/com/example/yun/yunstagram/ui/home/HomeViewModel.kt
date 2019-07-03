@@ -8,6 +8,7 @@ import com.example.yun.yunstagram.data.Post
 import com.example.yun.yunstagram.data.State
 import com.example.yun.yunstagram.data.User
 import com.example.yun.yunstagram.ui.BaseViewModel
+import com.example.yun.yunstagram.ui.search.SearchListType
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 
@@ -65,6 +66,7 @@ class HomeViewModel @Inject constructor(private val repository: DataRepository) 
                     val user = it.value().toObject(User::class.java)
                     user?.let { author ->
                         post.user = author
+                        post.canLike = post.likes?.contains(repository.getCurrentUid())
                         postList.add(post)
                         _posts.value = postList
                     }

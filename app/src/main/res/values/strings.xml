@@ -40,11 +40,13 @@
     <string name="title_post_detail">Photo</string>
     <string name="edit_post_hint">Write a caption..</string>
     <string name="edit_post_image">Edit</string>
+    <string name="post_likes">%d likes</string>
     <string name="message_post_image_upload">Please upload image file</string>
 
     <!-- Search -->
     <string name="title_search_followers">@string/account_followers</string>
     <string name="title_search_following">@string/account_following</string>
+    <string name="title_search_likes">Likes</string>
     <string name="hint_search_user">@string/title_search</string>
 
 </resources>

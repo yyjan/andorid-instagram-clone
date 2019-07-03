@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.androidhuman.rxfirebase2.firestore.model.Empty
 import com.example.yun.yunstagram.data.DataRepository
+import com.example.yun.yunstagram.data.Post
 import com.example.yun.yunstagram.data.User
 import com.example.yun.yunstagram.ui.BaseViewModel
 import io.reactivex.rxkotlin.plusAssign
@@ -23,12 +24,17 @@ class SearchViewModel @Inject constructor(private val repository: DataRepository
     val followings: LiveData<List<User>>
         get() = _followings
 
+    private val _likes = MutableLiveData<List<User>>()
+    val likes: LiveData<List<User>>
+        get() = _likes
+
     private val _openProfile = MutableLiveData<User>()
     val openProfile: LiveData<User>
         get() = _openProfile
 
     private val followerList: MutableList<User> = arrayListOf()
     private val followingList: MutableList<User> = arrayListOf()
+    private val likeList: MutableList<User> = arrayListOf()
 
     fun fetchUsers() {
         disposables += repository.getUsers()
@@ -103,6 +109,34 @@ class SearchViewModel @Inject constructor(private val repository: DataRepository
                 it.printStackTrace()
             }
     }
+
+    fun fetchLikes(id: String?) {
+        if (id.isNullOrEmpty()) return
+        disposables += repository.getPost(id)
+            .compose(loadingSingleTransformer())
+            .subscribe({
+                val post = it.value().toObject(Post::class.java)
+                val likes = post?.likes
+
+                likes?.forEach { id ->
+                    disposables += repository.getUser(id)
+                        .compose(loadingSingleTransformer())
+                        .subscribe({ data ->
+                            val like = data.value().toObject(User::class.java)
+                            like?.let {
+                                likeList.add(like)
+                                _likes.value = likeList
+                            }
+                        }) {
+                            it.printStackTrace()
+                        }
+                }
+
+            }) {
+                it.printStackTrace()
+            }
+    }
+
 
     fun onClickUserInfo(user: User) {
         _openProfile.value = user

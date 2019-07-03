@@ -27,15 +27,19 @@ class SearchFragment : DaggerFragment() {
 
     private var uid: String? = null
 
+    private var postId: String? = null
+
     private var searchType: String? = null
 
     companion object {
         const val ARGUMENT_UID = "UID"
+        const val ARGUMENT_POST_ID = "POST_ID"
         const val ARGUMENT_SEARCH_TYPE = "SEARCH_TYPE"
 
-        fun newInstance(uid: String? = null, type: String? = null) = SearchFragment().apply {
+        fun newInstance(uid: String? = null, postId:String? = null, type: String? = null) = SearchFragment().apply {
             arguments = Bundle().apply {
                 putString(ARGUMENT_UID, uid)
+                putString(ARGUMENT_POST_ID, postId)
                 putString(ARGUMENT_SEARCH_TYPE, type)
             }
         }
@@ -99,6 +103,9 @@ class SearchFragment : DaggerFragment() {
             SearchListType.USERS_FOLLOWINGS.name -> {
                 viewModel.fetchFollowings(uid)
             }
+            SearchListType.USERS_LIKES.name -> {
+                viewModel.fetchLikes(postId)
+            }
             else -> {
                 viewModel.fetchUsers()
             }
@@ -107,6 +114,7 @@ class SearchFragment : DaggerFragment() {
 
     private fun setupIntent() {
         uid = arguments?.getString(ARGUMENT_UID)
+        postId = arguments?.getString(ARGUMENT_POST_ID)
         searchType = arguments?.getString(ARGUMENT_SEARCH_TYPE)
     }
 
@@ -123,6 +131,10 @@ class SearchFragment : DaggerFragment() {
             if (followings.isNotEmpty()) adapter.submitList(followings)
         })
 
+        viewModel.likes.observe(this, Observer { likes ->
+            if (likes.isNotEmpty()) adapter.submitList(likes)
+        })
+
         viewModel.openProfile.observe(this, Observer {
             openProfileDetails(it)
         })
@@ -135,6 +147,9 @@ class SearchFragment : DaggerFragment() {
             }
             SearchListType.USERS_FOLLOWINGS.name -> {
                 getString(R.string.title_search_following)
+            }
+            SearchListType.USERS_LIKES.name -> {
+                getString(R.string.title_search_likes)
             }
             else -> {
                 getString(R.string.title_search)

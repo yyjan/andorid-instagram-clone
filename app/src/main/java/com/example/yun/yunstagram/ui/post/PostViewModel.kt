@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.yun.yunstagram.data.*
 import com.example.yun.yunstagram.utilities.getLocalDateTime
 import com.example.yun.yunstagram.ui.BaseViewModel
+import com.example.yun.yunstagram.ui.search.SearchListType
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 
@@ -35,6 +36,10 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     val openProfile: LiveData<User>
         get() = _openProfile
 
+    private val _openUsers = MutableLiveData<Any>()
+    val openUsers: LiveData<Any>
+        get() = _openUsers
+
     private var editState = false
 
     fun fetchPost(id: String?) {
@@ -44,6 +49,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             .subscribe({
                 _post.value = it.value().toObject(Post::class.java)
                 fetchUserData()
+                checkLike()
             }) {
                 it.printStackTrace()
             }
@@ -54,7 +60,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             .subscribe({
                 val postMap = mutableMapOf<String, Any?>()
                 postMap["id"] = it.id
-                updatePostValue(it.id, postMap)
+                updatePostValue(it.id, postMap, false)
                 _updateResult.value = State(isSuccess = true)
             }) {
                 _updateResult.value = State(errorMessages = it.message)
@@ -71,7 +77,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             }
     }
 
-    private fun updatePostValue(id: String?, value: Map<String, Any?>) {
+    private fun updatePostValue(id: String?, value: Map<String, Any?>, reload: Boolean) {
         id?.let {
             disposables += repository.updatePostValue(id, value)
                 .compose(loadingCompletableTransformer())
@@ -127,6 +133,10 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
         editState = postId != null
     }
 
+    fun checkLike() {
+        _post.value?.canLike = post.value?.likes?.contains(repository.getCurrentUid())
+    }
+
     fun sharePost(messages: String) {
         return if (editState) {
             updatePost(makeEditPost(messages))
@@ -135,14 +145,34 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
         }
     }
 
-    fun onClickLike(post: Post) {
+    fun onCompleteLikeChanged(post: Post, isChecked: Boolean) {
+        val currentUid = repository.getCurrentUid()
         val postMap = mutableMapOf<String, Any?>()
-        postMap["like_count"] = post.like_count?.plus(1)
-        updatePostValue(post.id, postMap)
+        val likes = arrayListOf<String?>()
+        post.likes?.let { list ->
+            likes.addAll(list)
+        }
+        if (isChecked) {
+            if (!likes.contains(currentUid)) {
+                likes.add(currentUid)
+                postMap["likes"] = likes
+                updatePostValue(post.id, postMap, true)
+            }
+        } else {
+            if (likes.contains(currentUid)) {
+                likes.remove(currentUid)
+                postMap["likes"] = likes
+                updatePostValue(post.id, postMap, true)
+            }
+        }
     }
 
     fun onClickUserInfo(user: User) {
         _openProfile.value = user
+    }
+
+    fun onClickLikes(post: Post) {
+        _openUsers.value = mutableMapOf(Pair("searchType", SearchListType.USERS_LIKES.name), Pair("postId", post.id))
     }
 
     private fun makeNewPost(messages: String = ""): Post {
@@ -166,7 +196,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             author = uid,
             message = messages,
             picture_url = post.value?.picture_url,
-            like_count = post.value?.like_count
+            likes = post.value?.likes
         )
     }
 
