@@ -28,6 +28,10 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
     val updateResult: LiveData<State>
         get() = _updateResult
 
+    private val _ownerState = MutableLiveData<Boolean>()
+    val ownerState: LiveData<Boolean>
+        get() = _ownerState
+
     private val _deleteState = MutableLiveData<State>()
     val deleteState: LiveData<State>
         get() = _deleteState
@@ -106,6 +110,7 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
             .compose(loadingSingleTransformer())
             .subscribe({
                 _user.value = it.value().toObject(User::class.java)
+                checkOwner(user.value?.uid)
             }) {
                 it.printStackTrace()
             }
@@ -135,6 +140,10 @@ class PostViewModel @Inject constructor(private val repository: DataRepository) 
 
     fun checkLike() {
         _post.value?.canLike = post.value?.likes?.contains(repository.getCurrentUid())
+    }
+
+    fun checkOwner(uid: String?) {
+        _ownerState.value = repository.getCurrentUid().equals(uid)
     }
 
     fun sharePost(messages: String) {
