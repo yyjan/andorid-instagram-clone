@@ -124,15 +124,24 @@ class SearchFragment : DaggerFragment() {
         })
 
         viewModel.followers.observe(this, Observer { followers ->
-            if (followers.isNotEmpty()) adapter.submitList(followers)
+            if (followers.isNotEmpty()) {
+                adapter.submitList(followers)
+                adapter.notifyDataSetChanged()
+            }
         })
 
         viewModel.followings.observe(this, Observer { followings ->
-            if (followings.isNotEmpty()) adapter.submitList(followings)
+            if (followings.isNotEmpty()) {
+                adapter.submitList(followings)
+                adapter.notifyDataSetChanged()
+            }
         })
 
         viewModel.likes.observe(this, Observer { likes ->
-            if (likes.isNotEmpty()) adapter.submitList(likes)
+            if (likes.isNotEmpty()) {
+                adapter.submitList(likes)
+                adapter.notifyDataSetChanged()
+            }
         })
 
         viewModel.openProfile.observe(this, Observer {

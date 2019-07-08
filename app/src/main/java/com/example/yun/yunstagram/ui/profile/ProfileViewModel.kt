@@ -155,7 +155,7 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
         _openUsers.value = mutableMapOf(Pair("searchType", SearchListType.USERS_FOLLOWINGS.name), Pair("uid", user.uid))
     }
 
-    fun onClickFollow(profileUser: User) {
+    fun onClickFollow(profileUser: User, isUnFollow: Boolean) {
         // check uid
         val currentUid = repository.getCurrentUid()
         val profileUid = profileUser.uid
@@ -163,26 +163,30 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
         if (profileUid.isNullOrEmpty()) return
 
         // increase follower
-        updateFollower(profileUser, currentUid, profileUid)
+        updateFollower(profileUser, currentUid, profileUid, isUnFollow)
 
         // increase following
-        updateFollowing(currentUid, profileUid)
+        updateFollowing(currentUid, profileUid, isUnFollow)
     }
 
-    private fun updateFollower(profileUser: User, currentUid: String, profileUid: String) {
+    private fun updateFollower(profileUser: User, currentUid: String, profileUid: String, isUnFollow: Boolean) {
         val userMap = mutableMapOf<String, Any?>()
         val followers = arrayListOf<String?>()
         profileUser.followers?.let { list ->
             followers.addAll(list)
         }
-        if (!followers.contains(currentUid)) {
+        if (followers.contains(currentUid)) {
+            if (isUnFollow) {
+                followers.remove(currentUid)
+            }
+        } else {
             followers.add(currentUid)
-            userMap["followers"] = followers
-            updateUserValue(profileUid, userMap, true)
         }
+        userMap["followers"] = followers
+        updateUserValue(profileUid, userMap, true)
     }
 
-    private fun updateFollowing(currentUid: String, profileUid: String) {
+    private fun updateFollowing(currentUid: String, profileUid: String, isUnFollow: Boolean) {
         disposables += repository.getUser(currentUid)
             .compose(loadingSingleTransformer())
             .subscribe({
@@ -193,11 +197,15 @@ class ProfileViewModel @Inject constructor(private val repository: DataRepositor
                     user.following?.let { list ->
                         following.addAll(list)
                     }
-                    if (!following.contains(currentUid)) {
+                    if (following.contains(profileUid)) {
+                        if (isUnFollow) {
+                            following.remove(profileUid)
+                        }
+                    } else {
                         following.add(profileUid)
-                        userMap["following"] = following
-                        updateUserValue(currentUid, userMap, false)
                     }
+                    userMap["following"] = following
+                    updateUserValue(currentUid, userMap, false)
                 }
             }) {
                 it.printStackTrace()
