@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentFavoriteBinding
+import com.example.yun.yunstagram.ui.adapters.FavoriteAdapter
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -34,9 +36,18 @@ class FavoriteFragment : DaggerFragment() {
             lifecycleOwner = this@FavoriteFragment
         }
 
+        val adapter = FavoriteAdapter(viewModel)
+        binding.listFavorite.adapter = adapter
+        subscribeUi(adapter, binding)
         changeTitle()
 
         return binding.root
+    }
+
+    private fun subscribeUi(adapter: FavoriteAdapter, binding: FragmentFavoriteBinding) {
+        viewModel.favorites.observe(this, Observer { favorites ->
+            if (favorites.isNotEmpty()) adapter.submitList(favorites)
+        })
     }
 
     private fun changeTitle() {
