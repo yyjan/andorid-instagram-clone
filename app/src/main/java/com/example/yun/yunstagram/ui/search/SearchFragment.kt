@@ -67,8 +67,8 @@ class SearchFragment : DaggerFragment() {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_search, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
 
         val searchItem = menu?.findItem(R.id.action_search)
         searchView = searchItem?.actionView as SearchView
