@@ -15,6 +15,7 @@ import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_POST_EDIT
 import com.example.yun.yunstagram.utilities.setupActionBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.android.synthetic.main.layout_app_bar.*
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
@@ -69,7 +70,17 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun replaceFragment(fragment: Fragment, tag: String) {
+        replaceLogo(fragment)
         replaceFragmentInActivity(fragment, R.id.contentFrame, tag)
+    }
+
+    private fun replaceLogo(fragment: Fragment) {
+        toolbar?.run {
+            when (fragment) {
+                is HomeFragment -> setLogo(R.drawable.ic_appbar_logo)
+                else -> logo = null
+            }
+        }
     }
 
     private fun openActivity(intent: Intent) {

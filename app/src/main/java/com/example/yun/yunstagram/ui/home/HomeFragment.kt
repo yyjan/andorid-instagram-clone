@@ -85,7 +85,7 @@ class HomeFragment : DaggerFragment() {
     }
 
     private fun changeTitle() {
-        activity?.title = getString(R.string.app_name)
+        activity?.title = ""
     }
 
     private fun loadPostList() {
