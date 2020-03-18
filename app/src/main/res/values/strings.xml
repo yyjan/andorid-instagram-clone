@@ -50,4 +50,6 @@
     <string name="title_search_likes">Likes</string>
     <string name="hint_search_user">@string/title_search</string>
 
+    <string name="message_page_building">Coming Soon</string>
+
 </resources>

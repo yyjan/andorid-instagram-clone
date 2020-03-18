@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.yun.yunstagram.GlideApp
 import com.example.yun.yunstagram.R
 import com.example.yun.yunstagram.databinding.FragmentPostEditBinding
+import com.example.yun.yunstagram.ui.adapters.bindImageFromUrl
 import com.example.yun.yunstagram.utilities.Constants
 import com.example.yun.yunstagram.utilities.Constants.REQUEST_CODE_FOR_IMAGE
 import com.google.android.material.snackbar.Snackbar
@@ -129,8 +130,7 @@ class PostEditFragment : DaggerFragment() {
 
 
     private fun showProfileImage(url: String?) {
-        GlideApp.with(this).load(url)
-            .into(iv_image)
+        bindImageFromUrl(iv_image, url)
     }
 
     private fun showMessage(message: Int) {

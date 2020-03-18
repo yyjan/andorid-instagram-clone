@@ -52,7 +52,8 @@
                         android:id="@+id/iv_image"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        app:circleImageFromUrl="@{post.picture_url}"/>
+                        android:background="@color/gray"
+                        app:imageFromUrl="@{post.picture_url}"/>
 
                 <TextView
                         android:id="@+id/btn_edit_image"

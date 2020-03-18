@@ -42,7 +42,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 app:circleImageFromUrl="@{user.profile_picture_url}"
-                                android:layout_marginRight="@dimen/common_margin_8dp"/>
+                                android:layout_marginRight="@dimen/common_margin_8dp" />
 
                         <LinearLayout
                                 android:id="@+id/layout_profile_info"
