@@ -96,10 +96,10 @@ class PostEditFragment : DaggerFragment() {
         }
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-//        inflater?.inflate(R.menu.menu_post_edit, menu)
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_post_edit, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
