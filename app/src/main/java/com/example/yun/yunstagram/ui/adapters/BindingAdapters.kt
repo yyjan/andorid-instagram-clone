@@ -21,9 +21,7 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
 
 @BindingAdapter("circleImageFromUrl")
 fun bindCircleImageFromUrl(view: ImageView, imageUrl: String?) {
-    if (!imageUrl.isNullOrEmpty()) {
-        view.loadCircleImage(imageUrl)
-    }
+    view.loadCircleImage(imageUrl)
 }
 
 @BindingAdapter("likesVisibility")

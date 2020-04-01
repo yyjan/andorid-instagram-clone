@@ -59,10 +59,6 @@ class AuthLoginFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // TODO: remove test code
-        et_email.setText("test@test.com")
-        et_password.setText("test1234")
-
         btn_login.setOnClickListener {
             val email = et_email.text.toString().trim()
             val password = et_password.text.toString().trim()
