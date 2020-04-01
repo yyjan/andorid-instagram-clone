@@ -79,13 +79,13 @@
                 android:id="@+id/iv_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minHeight="300dp"
+                android:adjustViewBounds="true"
+                android:minHeight="200dp"
                 app:imageFromUrl="@{post.picture_url}"
                 app:layout_constraintBottom_toTopOf="@+id/layout_menu"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_avatar"
-                tools:layout_height="300dp" />
+                app:layout_constraintTop_toBottomOf="@id/layout_avatar" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_menu"
@@ -122,10 +122,12 @@
                 android:id="@+id/tv_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:padding="@dimen/common_margin_8dp"
                 android:text="@{post.message}"
-                app:layout_constraintTop_toBottomOf="@+id/layout_menu"
                 app:layout_constraintBottom_toTopOf="@+id/view_divider"
+                app:layout_constraintTop_toBottomOf="@+id/layout_menu"
                 tools:text="post message..." />
 
         <View   style="@style/ViewDivider"
